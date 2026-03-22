@@ -93,6 +93,8 @@ The sandbox should support three explicit modes:
 
 Mode is part of run state and should be visible in every snapshot.
 
+In `god` mode, if a directive requires a physically impossible prerequisite, the engine should explicitly write the prerequisite override into the state and ledger rather than leaving a contradiction implied.
+
 ---
 
 ## State Model
@@ -127,6 +129,7 @@ Each persistent variable should carry both a numeric value and a short grounding
 ```
 
 The `summary` is not hidden reasoning. It is a compact state explanation for continuity and alignment.
+Summaries should be capped aggressively and periodically re-summarized so they do not become a second hidden history log.
 
 ### Persistent Artifacts Per Month
 
@@ -138,6 +141,10 @@ Every monthly step should persist structured artifacts:
 - `adjudication_record.json`
 - `sitrep.md`
 - `branch_meta.json`
+
+Periodic review artifacts should also be supported:
+
+- `continuity_review.json`
 
 The adjudication record should persist:
 
@@ -211,10 +218,11 @@ The user should be able to steer any relevant actor:
 - `italy`
 - `japan`
 - `france`
-- `neutral_bloc`
-- other named sub-actors if needed
+- named minor actors where strategically relevant
 
 This matters because many interesting outcomes come from changing more than one side.
+
+Major neutral and minor actors should not be collapsed permanently into a single `neutral_bloc`. Where they matter strategically, they should exist as simplified individual actors such as `turkey`, `spain`, `sweden`, `portugal`, or `switzerland`.
 
 ### Directive Resolution
 
@@ -234,6 +242,30 @@ Each resolution entry should include a short explanation and a list of the main 
 - enemy action
 - doctrine mismatch
 - institutional rivalry
+
+---
+
+## Scenario Templates
+
+The sandbox should ship with ready-to-run scenario templates so the directive system is useful immediately.
+
+Each template should be a reusable pack of:
+
+- initial directives,
+- optional state tweaks,
+- recommended mode,
+- suggested start date,
+- short historical rationale.
+
+Useful early templates:
+
+- `no_barbarossa`
+- `early_total_mobilization`
+- `successful_july_20_plot`
+- `mediterranean_first`
+- `fighter_priority_1942`
+
+Templates are both a user feature and a validation tool for whether the directive system is expressive enough.
 
 ---
 
@@ -257,22 +289,34 @@ The world state should be organized by domain rather than by one giant flat sche
 | Strategic Bombing & Repair | Bombing, repair cycles, dispersal, transport disruption | `bombing_damage_fuel`, `repair_capacity_industry`, `factory_dispersal_level` |
 | Technology & Programs | Program stages, bottlenecks, unlock timing | `me262_stage`, `stg44_stage`, `type_xxi_stage` |
 | Diplomacy & External Relations | Neutral trade, alliance cohesion, entry decisions, peace feelers | `us_entry_status`, `turkey_chromium_trade`, `negotiated_peace_feasibility` |
+| Information & Intelligence | What each actor knows, misreads, or conceals | `information_quality`, `recon_coverage`, `deception_effectiveness` |
 | Politics & Friction | Institutional resistance, regime behavior, social tolerance | see table below |
 
 ### Politics & Friction Variables
 
 These are critical because many counterfactuals fail for political or institutional reasons rather than physical ones.
 
+Each major steerable actor should have a politics/friction profile built from a shared template plus actor-specific extensions.
+
+Shared template variables:
+
 | Variable | Unit | Meaning |
 |----------|------|---------|
-| `hitler_interference` | 0-100 | Degree of destructive top-level interference in military and industrial decisions |
-| `bureaucratic_coordination` | 0-100 | Ability of ministries, armed services, and industry to act coherently |
-| `ideological_rigidity` | 0-100 | How much ideology prevents materially sensible choices |
-| `elite_cohesion` | 0-100 | Regime cohesion under stress; low values raise coup, paralysis, or fragmentation risk |
-| `civilian_tolerance` | 0-100 | Willingness to absorb bombing, shortages, and mobilization burdens |
-| `interservice_rivalry` | 0-100 | Competition among army, navy, air force, and party organs |
-| `occupation_brutality` | 0-100 | Drives resistance, sabotage, intelligence leakage, and diplomatic hardening |
+| `leadership_interference` | 0-100 | Degree of destructive high-level interference in military and industrial decisions |
+| `bureaucratic_coordination` | 0-100 | Ability of ministries, services, and industry to act coherently |
+| `ideological_rigidity` | 0-100 | How much ideology blocks materially sensible choices |
+| `elite_cohesion` | 0-100 | Regime or governing-coalition cohesion under stress |
+| `civilian_tolerance` | 0-100 | Willingness to absorb bombing, shortages, casualties, and mobilization burdens |
+| `interservice_rivalry` | 0-100 | Competition among armed services and political power centers |
 | `policy_flexibility` | 0-100 | Capacity to reverse prestige decisions before they become disasters |
+| `information_quality` | 0-100 | Quality of internal reporting, intelligence synthesis, and decision-relevant knowledge |
+
+Actor-specific extensions can then deepen the model where it matters:
+
+- Germany: `hitler_interference`, `occupation_brutality`
+- UK: `war_cabinet_unity`, `imperial_overstretch`
+- USSR: `stalin_interference`, `purge_aftereffects`, `casualty_tolerance`
+- USA: `isolationist_pressure`, `europe_first_cohesion`
 
 These variables should be numeric, but each should also carry a short summary so the LLM has context for why they are high or low.
 
@@ -281,7 +325,7 @@ These variables should be numeric, but each should also carry a short summary so
 Not every domain needs equal fidelity on day one.
 
 - Phase 1 should go deep on fuel, bombing, directives, checkpoints, and political friction.
-- Phase 2 should add production, logistics, and military posture.
+- Phase 2 should add production, logistics, one skeletal front model, and military posture.
 - Phase 3 should deepen multi-actor diplomacy and campaign outcomes.
 
 ---
@@ -325,7 +369,7 @@ For each month:
    - validate the incoming state.
 
 2. **LLM adjudication**
-   - determine what each major actor tries to do this month,
+   - determine what each major actor intends or attempts to do this month,
    - reconcile active directives with political and material reality,
    - decide ambiguous outcomes,
    - produce updated summaries and a structured monthly assessment.
@@ -342,6 +386,8 @@ For each month:
 4. **Validation and revision**
    - enforce hard caps,
    - reject impossible allocations,
+   - clip impossible actions to what the state can actually support when appropriate,
+   - log shortfalls and blocked intents explicitly,
    - detect contradictions between state and events,
    - if needed, send the result back for one more adjudication pass.
 
@@ -370,6 +416,7 @@ It should handle:
 - compression of the current state into short summaries.
 
 It should not be trusted to override hard physical constraints.
+Its outputs should be treated as proposed intents and qualitative assessments until deterministic code validates and applies them.
 
 ### Deterministic Tools
 
@@ -410,6 +457,41 @@ The persistence mechanism is:
 - checkpoint history.
 
 Not persistent hidden reasoning.
+
+### Prompt Projection
+
+Persisted snapshots can stay rich. Prompt payloads should be compact projections of those snapshots.
+
+The monthly adjudication prompt should usually contain:
+
+- numeric values for the bulk of state,
+- expanded summaries only for the most relevant variables,
+- active directives,
+- recent events,
+- continuity warnings if any exist.
+
+As a rule, only the roughly `10-15` most relevant variables should get full expanded summaries in a monthly prompt. The rest should travel in compact form unless the current month makes them salient.
+
+### Continuity Review
+
+Long runs need a separate continuity pass.
+
+Every `N` months, or on demand, the system should run a continuity review that inspects:
+
+- recent adjudication records,
+- active long-arc directives,
+- major causal threads,
+- key state summaries,
+- recent divergences from the reference timeline.
+
+This review should flag:
+
+- contradictions across months,
+- forgotten long-term consequences,
+- actor-behavior drift,
+- stale or misleading summaries.
+
+Its output should be persisted in `continuity_review.json` and fed back into future prompt projection when relevant.
 
 ---
 
@@ -593,6 +675,8 @@ Suggested shape:
   "theater": "eastern_front",
   "category": "military",
   "importance": 0.98,
+  "decision_window": true,
+  "decision_window_score": 0.92,
   "historical_summary": "6th Army is encircled and ultimately lost.",
   "historical_observables": {
     "pow": 91000,
@@ -602,6 +686,8 @@ Suggested shape:
   "sources": ["glantz", "mgfa"]
 }
 ```
+
+High-leverage moments should be tagged as decision windows so the sandbox can surface them as suggested pause points or template anchors.
 
 ### `checkpoints.json`
 
@@ -827,12 +913,15 @@ These are the concrete next tasks to move the project from spec to a working ske
 4. Create a minimal prompt pack:
    - system prompt,
    - monthly adjudication prompt,
+   - compact prompt projection rules,
    - divergence analysis prompt,
+   - continuity review prompt,
    - synthesis prompt.
 5. Scaffold the reference timeline files:
    - `REFERENCE_TIMELINE.md`
    - `events.jsonl`
    - `checkpoints.json`
+   - initial decision-window tags
 6. Implement a toy monthly loop with a very small state:
    - a few fuel variables,
    - one front supply variable,
@@ -842,8 +931,11 @@ These are the concrete next tasks to move the project from spec to a working ske
    - state validation,
    - fuel balance,
    - simple repair progress,
-   - directive resolution bookkeeping.
-8. Run one baseline micro-simulation and one deliberately divergent branch to prove the interaction model works.
+    - directive resolution bookkeeping.
+8. Add a first continuity review pass and verify that it can flag intentionally introduced contradictions.
+9. Run one baseline micro-simulation and one deliberately divergent branch to prove the interaction model works.
+
+The first serious vertical slice should probably start in June 1941 unless there is a strong reason to begin earlier.
 
 The main milestone is not realism yet. The main milestone is proving the loop of `run -> pause -> steer -> fork -> compare`.
 
@@ -860,12 +952,14 @@ Build the framework before the full world model.
 - directive ledger,
 - reference timeline schema,
 - provider-agnostic LLM client,
+- compact prompt projection layer,
 - monthly run loop,
 - pause/resume,
 - checkpoint creation,
 - branching,
 - sitrep generation,
-- adjudication record persistence.
+- adjudication record persistence,
+- continuity review pass.
 
 Use a very small state at first if needed. The important thing is to prove the interaction loop.
 
@@ -878,7 +972,8 @@ Deepen the fuel/oil subsystem first because it is one of the clearest strategic 
 - bombing damage,
 - repair and dispersal,
 - fuel allocation,
-- training penalties.
+- training penalties,
+- one skeletal front-status variable so fuel visibly affects operations.
 
 ### Phase 3: Production, Labor, And Logistics
 
@@ -920,6 +1015,8 @@ Build tools to compare branches and ask higher-level questions:
 - what blocked a preferred outcome,
 - how each branch scored across the outcome axes,
 - when and how each branch diverged from real history.
+
+Scenario templates and decision-window surfacing should be mature enough by this phase to guide exploration instead of forcing the user to invent every branch from scratch.
 
 ---
 
