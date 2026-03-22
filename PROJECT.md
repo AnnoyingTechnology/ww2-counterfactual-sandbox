@@ -88,7 +88,7 @@ The sandbox should support three explicit modes:
 | Mode | Meaning |
 |------|---------|
 | `strict` | The model strongly resists implausible directives. Political friction, institutional inertia, and material limits bite hard. |
-| `plausible` | The default mode. Strong steering is allowed, but actors still resist choices that clash with capacity, ideology, or incentives. |
+| `plausible` | The default mode. Strong steering is allowed, but actors still resist choices that clash with capacity, ideology, or incentives. "Plausible" here means plausible within the actual institutional, ideological, and moral reality of WW2, including regimes capable of extreme brutality and irrational escalation. |
 | `god` | The user can force outcomes or attempts well outside normal plausibility. The sim should still record downstream consequences and contradictions. |
 
 Mode is part of run state and should be visible in every snapshot.
@@ -1038,31 +1038,27 @@ Scenario templates and decision-window surfacing should be mature enough by this
 
 ---
 
-## Decisions For You
+## Resolved Product Decisions
 
-These are not implementation unknowns. These are product choices that you should decide explicitly.
+The following project choices are now settled unless later experience proves they need revision.
 
-1. What should the default mode be: `strict`, `plausible`, or `god`?
-2. Which actors should be steerable in v1: only Germany plus one opponent, or all major actors immediately?
-3. What should the first validated start date be: September 1939, June 1941, or another checkpoint?
-4. Do you want the first working prototype to be CLI-first, notebook-first, or minimal web UI?
-5. How much historical data do you want gathered before coding starts: bare minimum for the first loop, or a larger upfront documentation pass?
-6. Should checkpoints be created every month automatically, or only at explicit pause boundaries?
-7. How much pushback should `plausible` mode give against user directives?
-8. Should the first micro-simulation focus on fuel only, or fuel plus one military front variable so the loop feels more alive?
-9. Do you want exogenous Allied behavior in v1 except when directly steered, or should adaptive response be built in immediately?
-10. Do you want provider config committed as local templates only, or do you plan to support multiple endpoints from day one?
-11. Do you want the repo to stay stdlib-first unless blocked, or are you comfortable adding a small dependency set early for CLI/config ergonomics?
+1. Default mode: `plausible`.
+2. Monthly resolution only. Important within-month developments can appear as sub-month events inside the monthly adjudication record, but the simulation state advances in monthly ticks only.
+3. Mode differences should stay simple and secondary in early versions. `plausible` is the main experience, `strict` is a higher-friction variant, and `god` is an override-heavy sandbox mode.
+4. Actor steering should be asymmetrical first. The system may support many actors, but richer directive vocabularies and deeper internal modeling should arrive first for the actors most central to the initial slice.
+5. Minimum UI: rich CLI first. The engine should support commands such as `run`, `resume`, `fork`, `status`, `report`, and `compare`, with browsable reports written to disk.
+6. Initial Allied adaptation should be light and reactive. v1 should mostly use historical or scripted Allied behavior, with adaptive changes triggered only when the branch crosses major divergence thresholds.
+7. The first serious vertical slice should still center on June 1941, with Germany and the USSR receiving the deepest early modeling even if other actors remain present in simpler form.
+8. The first micro-simulation should include fuel plus at least one front variable so economic changes have visible operational consequences.
 
 ---
 
-## Architecture Open Questions
+## Remaining Architecture Open Questions
 
-1. How much endogenous Allied adaptation is required before the sandbox feels convincing under aggressive steering?
-2. When should the model switch from monthly to weekly resolution for major campaign windows?
-3. How strong should mode differences feel in practice?
-4. Should actor steering be symmetrical, or should some actors get richer directive vocabularies first?
-5. What is the minimum UI needed before this becomes fun to use regularly?
+1. What exact divergence thresholds should trigger Allied or other exogenous actors to stop following historical behavior and start adapting more aggressively?
+2. How should asymmetrical steering depth be staged after the initial Germany-USSR slice?
+3. Should automatic monthly checkpoints be mandatory in addition to user-facing pause checkpoints, or is that purely an implementation detail?
+4. How much transparency should the CLI expose by default versus leaving in the generated artifacts on disk?
 
 ---
 
