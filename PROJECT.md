@@ -45,6 +45,7 @@ Historical honesty still matters. A run with historical settings and no steering
 5. **Persistence must be structured.** The durable artifact is a state snapshot plus ledgers and summaries, not a stored reasoning trace.
 6. **Branching is native.** The system should encourage "what if I pivot here?" rather than forcing one linear playthrough.
 7. **Fun matters.** The sandbox should be enjoyable to use, not just defensible on paper.
+8. **No sanitization of atrocity.** When branch conditions, directives, or actor behavior imply genocide, political liquidation, deportation, terror, or mass repression, the model must represent them plainly and causally rather than euphemizing, omitting, or toning them down.
 
 ---
 
@@ -296,8 +297,39 @@ The world state should be organized by domain rather than by one giant flat sche
 | Strategic Bombing & Repair | Bombing, repair cycles, dispersal, transport disruption | `bombing_damage_fuel`, `repair_capacity_industry`, `factory_dispersal_level` |
 | Technology & Programs | Program stages, bottlenecks, unlock timing | `me262_stage`, `stg44_stage`, `type_xxi_stage` |
 | Diplomacy & External Relations | Neutral trade, alliance cohesion, entry decisions, peace feelers | `us_entry_status`, `turkey_chromium_trade`, `negotiated_peace_feasibility` |
+| Atrocity & Repression | Genocide, occupation terror, deportation, political liquidation, secrecy burden | `genocidal_policy_intensity`, `political_repression_intensity`, `deportation_intensity`, `atrocity_administrative_capacity` |
 | Information & Intelligence | What each actor knows, misreads, or conceals | `information_quality`, `recon_coverage`, `deception_effectiveness` |
 | Politics & Friction | Institutional resistance, regime behavior, social tolerance | see table below |
+
+### Atrocity & Repression Modeling
+
+This sandbox is explicitly allowed to model genocide, mass repression, deportation, occupation terror, and political liquidation as part of WW2 reality and counterfactual divergence.
+
+The model should support high-level variables such as:
+
+- `genocidal_policy_intensity`
+- `political_repression_intensity`
+- `deportation_intensity`
+- `atrocity_administrative_capacity`
+- `secrecy_burden`
+- `occupation_brutality`
+
+These variables exist to model system-level behavior and consequences, not to create a user-facing operational planner.
+
+The engine should propagate their effects into:
+
+- transport burden,
+- labor distortion,
+- partisan growth,
+- sabotage and intelligence leakage,
+- diplomatic hardening,
+- negotiated peace collapse,
+- elite radicalization or fracture,
+- long-run state degradation.
+
+The model must not sanitize these dynamics. If the branch implies them, reports and summaries should name them plainly.
+
+Counterfactual reductions or avoidance of specific atrocities are valid only when the branch actually changes the underlying policy path, leadership structure, coercive apparatus, or ideological commitments. The model should not invent moral restraint that is unsupported by the branch state.
 
 ### Politics & Friction Variables
 
@@ -485,6 +517,10 @@ Prompt projection should also include explicit anti-historical anchoring when th
 Example guidance:
 
 `Do not assume the historical result for this month still applies. This branch has diverged in the following material ways: ...`
+
+Prompt rules should also explicitly state that this is a realistic human-atrocity sandbox covering a war of genocide, terror, and mass repression. The model must not soften, euphemize, or suppress atrocity dynamics when they are implied by actor policy or branch state.
+
+At the same time, prompts should make clear that the engine accepts high-level directives and simulates consequences; it does not provide detailed operational guidance for carrying out atrocities.
 
 ### Continuity Review
 
@@ -931,6 +967,7 @@ These are the concrete next tasks to move the project from spec to a working ske
    - monthly adjudication prompt,
    - compact prompt projection rules,
    - anti-historical anchor rules,
+   - atrocity-realism and no-sanitization rules,
    - divergence analysis prompt,
    - continuity review prompt,
    - synthesis prompt.
