@@ -692,14 +692,15 @@ The project should keep source-linked notes for constants, time series, and majo
 
 | Component | Technology |
 |-----------|------------|
-| Orchestration | Python |
+| Orchestration | Go |
 | LLM | Provider-agnostic client, ideally targeting OpenAI-compatible APIs first |
 | State storage | JSON snapshots and JSONL ledgers |
 | Constants and caps | YAML or JSON |
-| Analysis | Jupyter notebooks |
+| Analysis | Go CLI outputs first, notebooks optional later |
 | Comparison UI | Minimal web UI or TUI later |
 
 The implementation should be vendor-agnostic enough to swap LLMs without rewriting the engine.
+The implementation should also aim for a boring deployment story: one Go binary, config files, and as few external dependencies as practical.
 
 ### LLM Provider Abstraction
 
@@ -742,6 +743,28 @@ The common denominator should be:
 
 If a provider exposes extra features, they should be optional adapters rather than core engine assumptions.
 
+### Go Implementation Bias
+
+The project should prefer the Go standard library unless a third-party package clearly saves time without creating long-term maintenance pain.
+
+Priority areas for stdlib-first implementation:
+
+- HTTP client integration for LLM APIs
+- JSON encoding and decoding
+- file and directory management
+- CLI entrypoints
+- prompt templating
+- validation and persistence helpers
+
+Third-party dependencies should be added cautiously and only when they provide clear leverage, for example:
+
+- JSON schema validation,
+- nicer CLI ergonomics,
+- structured logging,
+- optional TUI or web layers.
+
+The v1 goal is not a clever architecture. The v1 goal is a dependable single-binary engine with a clean storage model.
+
 ---
 
 ## Suggested Repository Shape
@@ -770,13 +793,15 @@ runs/
     reports/
 
 src/
-  engine/
-  llm/
-  tools/
-  schemas/
-  prompts/
+  cmd/
+  internal/
+    engine/
+    llm/
+    tools/
+    schemas/
+    prompts/
 
-notebooks/
+web/
 ```
 
 ---
@@ -792,7 +817,7 @@ These are the concrete next tasks to move the project from spec to a working ske
    - `adjudication_record`
    - `reference_timeline_event`
    - `reference_timeline_checkpoint`
-2. Build the provider-agnostic LLM client with OpenAI-compatible configuration first.
+2. Build the provider-agnostic LLM client in Go with OpenAI-compatible configuration first.
 3. Create the run storage layout:
    - run id generation,
    - branch ids,
@@ -830,6 +855,7 @@ The main milestone is not realism yet. The main milestone is proving the loop of
 
 Build the framework before the full world model.
 
+- Go module setup,
 - snapshot schema,
 - directive ledger,
 - reference timeline schema,
@@ -911,6 +937,7 @@ These are not implementation unknowns. These are product choices that you should
 8. Should the first micro-simulation focus on fuel only, or fuel plus one military front variable so the loop feels more alive?
 9. Do you want exogenous Allied behavior in v1 except when directly steered, or should adaptive response be built in immediately?
 10. Do you want provider config committed as local templates only, or do you plan to support multiple endpoints from day one?
+11. Do you want the repo to stay stdlib-first unless blocked, or are you comfortable adding a small dependency set early for CLI/config ergonomics?
 
 ---
 
