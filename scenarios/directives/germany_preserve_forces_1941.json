@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dir_1941_08_germany_01",
+    "actor": "germany",
+    "effective_from": "1941-08",
+    "effective_to": "1941-12",
+    "scope": "eastern_front",
+    "strength": "hard",
+    "priority": 0.94,
+    "instruction": "Avoid prestige-driven overextension. Preserve formations, shorten exposed salients, and prioritize withdrawal authority where local advances threaten supply viability.",
+    "notes": "Trade some short-term territorial ambition for force preservation and transport resilience.",
+    "origin": "user"
+  }
+]

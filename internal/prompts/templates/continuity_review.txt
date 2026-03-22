@@ -1,0 +1,20 @@
+Review the last few months of this branch for continuity drift and stale summaries.
+
+Branch: {{ .BranchID }}
+Current month: {{ .Date }}
+
+Current state:
+{{ .ProjectedState }}
+
+Recent adjudication records:
+{{ .RecentRecords }}
+
+Recent continuity reviews:
+{{ .RecentReviews }}
+
+Return structured JSON with:
+- status
+- warnings
+- recommended_summary_refresh
+- notes
+- confidence

@@ -1,0 +1,34 @@
+Target month: {{ .TargetDate }}
+Mode: {{ .Mode }}
+Current branch: {{ .BranchID }}
+Current snapshot date: {{ .CurrentDate }}
+
+Context:
+{{ .ProjectedState }}
+
+Active directives:
+{{ .ActiveDirectives }}
+
+Recent events:
+{{ .RecentEvents }}
+
+Historical anchors:
+{{ .HistoricalAnchors }}
+
+Continuity warnings:
+{{ .ContinuityWarnings }}
+
+If this branch has materially diverged, reason from the branch state rather than the known historical outcome.
+Return structured JSON for:
+- rationale_summary
+- assumptions
+- blocked_by
+- confidence
+- derived_orders
+- unexpected_effects
+- tool_calls_used
+- proposed_changes
+- events
+- directive_resolutions
+- sitrep_headline
+- sitrep_body

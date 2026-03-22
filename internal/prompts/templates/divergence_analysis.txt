@@ -1,0 +1,15 @@
+Assess how far this branch has diverged from the historical baseline.
+
+Branch: {{ .BranchID }}
+Month: {{ .Date }}
+
+Projected state:
+{{ .ProjectedState }}
+
+Relevant historical anchors:
+{{ .HistoricalAnchors }}
+
+Explain:
+- whether baseline assumptions still hold,
+- the main points of divergence,
+- which historical forcing functions no longer apply.

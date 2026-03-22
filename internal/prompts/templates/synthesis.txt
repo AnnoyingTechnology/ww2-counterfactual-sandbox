@@ -1,0 +1,17 @@
+Write a concise branch synthesis for a WW2 counterfactual sandbox checkpoint.
+
+Branch: {{ .BranchID }}
+Date: {{ .Date }}
+Mode: {{ .Mode }}
+
+State summary:
+{{ .ProjectedState }}
+
+Recent events:
+{{ .RecentEvents }}
+
+Focus on:
+- what changed,
+- which directives mattered,
+- what was blocked,
+- the main strategic consequences.

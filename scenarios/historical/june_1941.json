@@ -1,0 +1,8 @@
+{
+  "name": "historical_june_1941",
+  "description": "Baseline June 1941 start state for the first serious vertical slice.",
+  "baseline_snapshot": "data/baselines/june_1941_germany_ussr.json",
+  "recommended_mode": "plausible",
+  "suggested_start_date": "1941-06",
+  "historical_rationale": "This start point is late enough for the eastern campaign to matter immediately and early enough for major strategic divergence."
+}

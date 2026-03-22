@@ -1,0 +1,9 @@
+{
+  "runs_dir": "runs",
+  "default_mode": "plausible",
+  "baseline_snapshot": "data/baselines/june_1941_germany_ussr.json",
+  "checkpoint_every_month": true,
+  "decision_window_interrupts": true,
+  "continuity_review_every_months": 3,
+  "prompt_summary_limit": 12
+}

@@ -1,0 +1,22 @@
+{
+  "name": "early_fuel_priority",
+  "description": "Push German allocation choices toward fuel, repair, and transport resilience early.",
+  "baseline_snapshot": "data/baselines/june_1941_germany_ussr.json",
+  "recommended_mode": "plausible",
+  "suggested_start_date": "1941-06",
+  "historical_rationale": "Tests whether early sustainment bias changes the branch without requiring a full production model.",
+  "directives": [
+    {
+      "id": "dir_1941_06_germany_01",
+      "actor": "germany",
+      "effective_from": "1941-06",
+      "effective_to": "1941-12",
+      "scope": "fuel_and_repair",
+      "strength": "hard",
+      "priority": 0.9,
+      "instruction": "Prioritize fuel output, repair assets, and transport resilience over prestige allocations.",
+      "notes": "Accept slower glamour programs if necessary.",
+      "origin": "scenario"
+    }
+  ]
+}

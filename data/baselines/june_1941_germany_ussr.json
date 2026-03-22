@@ -1,0 +1,162 @@
+{
+  "snapshot_id": "baseline_1941_06",
+  "branch_id": "baseline",
+  "date": "1941-06",
+  "mode": "plausible",
+  "actors": {
+    "germany": {
+      "summary": "Germany is positioned for a high-risk eastern campaign and remains constrained by ideology, competing institutions, and medium-term fuel vulnerability.",
+      "current_objective": "Seek operational decision before structural weaknesses bite too hard."
+    },
+    "ussr": {
+      "summary": "The USSR faces imminent crisis but retains the depth to survive catastrophic opening losses if time can be bought.",
+      "current_objective": "Survive the initial shock and preserve a path to regeneration."
+    },
+    "uk": {
+      "summary": "The UK remains resilient, economically connected, and strategically patient.",
+      "current_objective": "Hold out, tighten pressure, and wait for openings created by Axis overreach."
+    }
+  },
+  "domains": {
+    "raw_materials_energy": {
+      "oil_stockpile": {
+        "value": 78,
+        "unit": "stockpile_index",
+        "hard_cap": 100,
+        "summary": "Fuel reserves are workable but not comfortable; sustained operations will keep drawing them down.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "synthetic_fuel_output": {
+        "value": 12,
+        "unit": "output_index",
+        "hard_cap": 20,
+        "summary": "Synthetic output helps, but it does not erase long-term vulnerability.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "romanian_oil_access": {
+        "value": 0.88,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Romanian access remains strong, though exposed to future pressure.",
+        "source_note": "Initial scaffold baseline"
+      }
+    },
+    "logistics_fronts": {
+      "supply_status_east": {
+        "value": 0.74,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Eastern supply is good enough for momentum but vulnerable to distance and rail friction.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "front_position_east": {
+        "value": 0.52,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "The eastern front is poised between opportunity and overstretch.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "partisan_pressure": {
+        "value": 0.14,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Rear-area insecurity exists but is not yet dominant.",
+        "source_note": "Initial scaffold baseline"
+      }
+    },
+    "strategic_bombing_repair": {
+      "bombing_damage_fuel": {
+        "value": 0.02,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Fuel-plant bombing damage remains minor in this opening slice.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "repair_capacity_industry": {
+        "value": 0.58,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Repair capacity is real, but not unlimited.",
+        "source_note": "Initial scaffold baseline"
+      }
+    },
+    "diplomacy_external_relations": {
+      "negotiated_peace_feasibility": {
+        "value": 0.08,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Peace remains remote without deep strategic or political change.",
+        "source_note": "Initial scaffold baseline"
+      }
+    },
+    "atrocity_repression": {
+      "genocidal_policy_intensity": {
+        "value": 0.48,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Radical policy is already embedded and can intensify further if the branch pushes in that direction.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "occupation_brutality": {
+        "value": 0.44,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Occupation behavior is already harsh and politically costly over time.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "deportation_intensity": {
+        "value": 0.4,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Coercive displacement is already part of regime behavior.",
+        "source_note": "Initial scaffold baseline"
+      }
+    },
+    "politics_friction": {
+      "leadership_interference": {
+        "value": 65,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Senior interference is persistent enough to distort operational and industrial choices.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "bureaucratic_coordination": {
+        "value": 46,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Coordination is workable but fragmented by rivalry.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "ideological_rigidity": {
+        "value": 84,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Ideology remains a major barrier to materially rational choices.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "elite_cohesion": {
+        "value": 72,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Elite cohesion remains substantial, though partly fear-driven.",
+        "source_note": "Initial scaffold baseline"
+      },
+      "policy_flexibility": {
+        "value": 24,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Prestige choices remain hard to reverse cleanly.",
+        "source_note": "Initial scaffold baseline"
+      }
+    }
+  },
+  "run_metadata": {
+    "run_id": "baseline",
+    "scenario": "historical_june_1941",
+    "source_baseline": "data/baselines/june_1941_germany_ussr.json",
+    "diverged_from_history": false,
+    "steps_executed": 0,
+    "created_at": "2026-03-22T00:00:00Z",
+    "updated_at": "2026-03-22T00:00:00Z"
+  }
+}

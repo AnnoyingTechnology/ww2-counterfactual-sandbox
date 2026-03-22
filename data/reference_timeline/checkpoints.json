@@ -1,0 +1,30 @@
+[
+  {
+    "id": "checkpoint_1941_12",
+    "date": "1941-12",
+    "description": "German advance stalls before Moscow.",
+    "observables": {
+      "logistics_fronts.front_position_east": 0.58,
+      "logistics_fronts.supply_status_east": 0.54,
+      "raw_materials_energy.oil_stockpile": 60
+    }
+  },
+  {
+    "id": "checkpoint_1943_05",
+    "date": "1943-05",
+    "description": "Atlantic campaign turns decisively against U-boats.",
+    "observables": {
+      "diplomacy_external_relations.negotiated_peace_feasibility": 0.05,
+      "raw_materials_energy.oil_stockpile": 48
+    }
+  },
+  {
+    "id": "checkpoint_1944_08",
+    "date": "1944-08",
+    "description": "Romanian defection worsens German fuel position and strategic collapse accelerates.",
+    "observables": {
+      "raw_materials_energy.romanian_oil_access": 0.4,
+      "raw_materials_energy.oil_stockpile": 25
+    }
+  }
+]
