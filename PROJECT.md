@@ -514,6 +514,161 @@ Forking from the same checkpoint should preserve shared history cleanly and dive
 
 ---
 
+## Historical Reference Timeline
+
+The project should maintain an explicit reference timeline of real WW2 events and benchmark states.
+
+This should exist in two forms:
+
+- a human-readable reference document,
+- a machine-readable dataset for validation, divergence tracking, and prompt grounding.
+
+### Purpose
+
+The reference timeline exists to help the sandbox understand and measure history, not to force branches back onto it.
+
+Use it for:
+
+- validating the historical baseline run,
+- comparing a branch to real history at major checkpoints,
+- identifying when a branch has meaningfully diverged,
+- grounding the monthly adjudication with compact historical anchors,
+- helping a dedicated analysis agent review whether the model is still behaving plausibly.
+
+Do not use it for:
+
+- silently overriding user steering,
+- forcing counterfactual branches toward historical outcomes,
+- injecting the full historical timeline into every monthly prompt,
+- treating divergence from history as an automatic error after the branch has clearly split.
+
+### Required Files
+
+The project should eventually maintain:
+
+- `REFERENCE_TIMELINE.md`
+- `data/reference_timeline/events.jsonl`
+- `data/reference_timeline/checkpoints.json`
+
+### `REFERENCE_TIMELINE.md`
+
+This file is for humans.
+
+It should provide a readable month-by-month or quarter-by-quarter overview of:
+
+- major military operations,
+- production and resource turning points,
+- diplomatic changes,
+- bombing campaign shifts,
+- internal political changes,
+- major decision windows.
+
+This gives the developer or user a quick reality check without parsing raw data files.
+
+### `events.jsonl`
+
+This file is for machine-readable event references.
+
+Each row should describe a historically important event, such as:
+
+- Fall of France,
+- launch of Barbarossa,
+- failure before Moscow,
+- Stalingrad encirclement,
+- Kursk,
+- Allied bomber offensive shifts,
+- Ploesti raids,
+- D-Day,
+- Romanian defection,
+- collapse in 1945.
+
+Suggested shape:
+
+```json
+{
+  "id": "stalingrad_encirclement",
+  "date_start": "1942-11",
+  "date_end": "1943-02",
+  "actors": ["germany", "ussr"],
+  "theater": "eastern_front",
+  "category": "military",
+  "importance": 0.98,
+  "historical_summary": "6th Army is encircled and ultimately lost.",
+  "historical_observables": {
+    "pow": 91000,
+    "front_shift_km": -200,
+    "elite_unit_loss": "high"
+  },
+  "sources": ["glantz", "mgfa"]
+}
+```
+
+### `checkpoints.json`
+
+This file should contain benchmark monthly or quarterly state snapshots used for direct comparison.
+
+Examples:
+
+- front position in December 1941,
+- fuel output in mid-1942,
+- U-boat loss spike in May 1943,
+- fighter production in mid-1944,
+- synthetic fuel collapse in late 1944,
+- final collapse in spring 1945.
+
+Checkpoint records should favor measurable observables:
+
+- front status,
+- fuel availability,
+- industrial output,
+- manpower state,
+- bombing intensity,
+- shipping losses,
+- diplomatic state,
+- peace feasibility,
+- regime stability.
+
+### Comparison Modes
+
+The comparison system should operate in two modes:
+
+| Mode | Meaning |
+|------|---------|
+| `baseline` | Used when a run is intended to follow history closely. Deviations are treated as calibration issues or model drift signals. |
+| `divergence` | Used after a branch has materially split from history. Deviations are reported as differences, not errors. |
+
+The engine should be able to say:
+
+- how close the current branch is to history,
+- when the branch meaningfully diverged,
+- which historical assumptions no longer apply,
+- which exogenous assumptions may need to be relaxed because of that divergence.
+
+### Prompt Usage
+
+The LLM should not receive the entire historical timeline each month.
+
+Instead, the system should inject only the relevant reference slice:
+
+- current-month historical benchmarks,
+- recent nearby historical events,
+- any directly relevant milestone for the current theater or decision.
+
+This keeps prompts compact while still grounding the model in real chronology.
+
+### Dedicated Timeline Analysis
+
+The timeline should also support a separate analysis pass or dedicated agent that periodically asks:
+
+- is the current branch still close enough to history for baseline assumptions to hold,
+- which variables are drifting too far from real history,
+- has the branch diverged enough that historical forcing functions should be modified,
+- what date and event mark the first major divergence.
+
+This gives the project a formal way to distinguish calibration problems from intentional alternate history.
+
+---
+
 ## Data Sources
 
 The same source base still makes sense, but the role changes slightly: sources are not only for one Germany-centric economic model, but also for response logic and actor capability envelopes.
@@ -538,7 +693,7 @@ The project should keep source-linked notes for constants, time series, and majo
 | Component | Technology |
 |-----------|------------|
 | Orchestration | Python |
-| LLM | Configurable frontier model with strong long-context reasoning |
+| LLM | Provider-agnostic client, ideally targeting OpenAI-compatible APIs first |
 | State storage | JSON snapshots and JSONL ledgers |
 | Constants and caps | YAML or JSON |
 | Analysis | Jupyter notebooks |
@@ -546,15 +701,61 @@ The project should keep source-linked notes for constants, time series, and majo
 
 The implementation should be vendor-agnostic enough to swap LLMs without rewriting the engine.
 
+### LLM Provider Abstraction
+
+The engine should not be tightly coupled to one vendor SDK.
+
+Instead, define a small internal interface for adjudication calls, for example:
+
+```text
+generate_adjudication(
+  messages,
+  tools,
+  response_schema,
+  model_config
+) -> StructuredAdjudication
+```
+
+The first transport target should be any OpenAI-compatible API, configured by:
+
+- `base_url`
+- `api_key_env`
+- `model`
+- `timeout`
+- `max_tokens`
+- `temperature`
+
+This should allow the same engine to talk to:
+
+- OpenAI-compatible hosted providers,
+- router services,
+- self-hosted gateways,
+- local OpenAI-compatible model servers.
+
+The common denominator should be:
+
+- chat-style messages,
+- tool calling,
+- structured JSON output,
+- model name and sampling config,
+- retry and timeout handling.
+
+If a provider exposes extra features, they should be optional adapters rather than core engine assumptions.
+
 ---
 
 ## Suggested Repository Shape
 
 ```text
+config/
+  llm/
+  runtime/
+
 data/
   exogenous/
   constants/
   baselines/
+  reference_timeline/
 
 scenarios/
   historical/
@@ -570,12 +771,56 @@ runs/
 
 src/
   engine/
+  llm/
   tools/
   schemas/
   prompts/
 
 notebooks/
 ```
+
+---
+
+## Immediate Next Steps
+
+These are the concrete next tasks to move the project from spec to a working skeleton.
+
+1. Define the core schemas:
+   - `snapshot`
+   - `directive`
+   - `checkpoint`
+   - `adjudication_record`
+   - `reference_timeline_event`
+   - `reference_timeline_checkpoint`
+2. Build the provider-agnostic LLM client with OpenAI-compatible configuration first.
+3. Create the run storage layout:
+   - run id generation,
+   - branch ids,
+   - checkpoint creation,
+   - snapshot persistence,
+   - ledger append helpers.
+4. Create a minimal prompt pack:
+   - system prompt,
+   - monthly adjudication prompt,
+   - divergence analysis prompt,
+   - synthesis prompt.
+5. Scaffold the reference timeline files:
+   - `REFERENCE_TIMELINE.md`
+   - `events.jsonl`
+   - `checkpoints.json`
+6. Implement a toy monthly loop with a very small state:
+   - a few fuel variables,
+   - one front supply variable,
+   - one directive,
+   - one checkpoint and branch.
+7. Add the first deterministic tools:
+   - state validation,
+   - fuel balance,
+   - simple repair progress,
+   - directive resolution bookkeeping.
+8. Run one baseline micro-simulation and one deliberately divergent branch to prove the interaction model works.
+
+The main milestone is not realism yet. The main milestone is proving the loop of `run -> pause -> steer -> fork -> compare`.
 
 ---
 
@@ -587,6 +832,8 @@ Build the framework before the full world model.
 
 - snapshot schema,
 - directive ledger,
+- reference timeline schema,
+- provider-agnostic LLM client,
 - monthly run loop,
 - pause/resume,
 - checkpoint creation,
@@ -645,11 +892,29 @@ Build tools to compare branches and ask higher-level questions:
 - what changed at this fork,
 - which directives mattered,
 - what blocked a preferred outcome,
-- how each branch scored across the outcome axes.
+- how each branch scored across the outcome axes,
+- when and how each branch diverged from real history.
 
 ---
 
-## Open Questions
+## Decisions For You
+
+These are not implementation unknowns. These are product choices that you should decide explicitly.
+
+1. What should the default mode be: `strict`, `plausible`, or `god`?
+2. Which actors should be steerable in v1: only Germany plus one opponent, or all major actors immediately?
+3. What should the first validated start date be: September 1939, June 1941, or another checkpoint?
+4. Do you want the first working prototype to be CLI-first, notebook-first, or minimal web UI?
+5. How much historical data do you want gathered before coding starts: bare minimum for the first loop, or a larger upfront documentation pass?
+6. Should checkpoints be created every month automatically, or only at explicit pause boundaries?
+7. How much pushback should `plausible` mode give against user directives?
+8. Should the first micro-simulation focus on fuel only, or fuel plus one military front variable so the loop feels more alive?
+9. Do you want exogenous Allied behavior in v1 except when directly steered, or should adaptive response be built in immediately?
+10. Do you want provider config committed as local templates only, or do you plan to support multiple endpoints from day one?
+
+---
+
+## Architecture Open Questions
 
 1. How much endogenous Allied adaptation is required before the sandbox feels convincing under aggressive steering?
 2. When should the model switch from monthly to weekly resolution for major campaign windows?
