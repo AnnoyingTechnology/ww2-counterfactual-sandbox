@@ -152,6 +152,7 @@ The adjudication record should persist:
 - `assumptions`
 - `blocked_by`
 - `confidence`
+- `derived_orders`
 - `unexpected_effects`
 - `tool_calls_used`
 
@@ -242,6 +243,12 @@ Each resolution entry should include a short explanation and a list of the main 
 - enemy action
 - doctrine mismatch
 - institutional rivalry
+
+Directive resolution should be highly specific rather than generic. It should identify the concrete limiting variables, thresholds, and interactions that caused the directive to fail or only partially succeed.
+
+Example style:
+
+`Directive blocked: rail capacity on the southern axis is below required threshold, truck availability is insufficient for flank security, and leadership interference prevented timely withdrawal authority.`
 
 ---
 
@@ -371,6 +378,7 @@ For each month:
 2. **LLM adjudication**
    - determine what each major actor intends or attempts to do this month,
    - reconcile active directives with political and material reality,
+   - translate high-level directives into concrete derived orders,
    - decide ambiguous outcomes,
    - produce updated summaries and a structured monthly assessment.
 
@@ -471,6 +479,12 @@ The monthly adjudication prompt should usually contain:
 - continuity warnings if any exist.
 
 As a rule, only the roughly `10-15` most relevant variables should get full expanded summaries in a monthly prompt. The rest should travel in compact form unless the current month makes them salient.
+
+Prompt projection should also include explicit anti-historical anchoring when the branch has materially diverged. The model should be reminded to reason from the current branch state and constraints, not from its prior knowledge of the real historical outcome.
+
+Example guidance:
+
+`Do not assume the historical result for this month still applies. This branch has diverged in the following material ways: ...`
 
 ### Continuity Review
 
@@ -688,6 +702,8 @@ Suggested shape:
 ```
 
 High-leverage moments should be tagged as decision windows so the sandbox can surface them as suggested pause points or template anchors.
+
+Decision windows should also support optional interrupt behavior: the engine may automatically pause when a critical window is reached and invite the user to inject directives before continuing.
 
 ### `checkpoints.json`
 
@@ -914,6 +930,7 @@ These are the concrete next tasks to move the project from spec to a working ske
    - system prompt,
    - monthly adjudication prompt,
    - compact prompt projection rules,
+   - anti-historical anchor rules,
    - divergence analysis prompt,
    - continuity review prompt,
    - synthesis prompt.
@@ -931,7 +948,8 @@ These are the concrete next tasks to move the project from spec to a working ske
    - state validation,
    - fuel balance,
    - simple repair progress,
-    - directive resolution bookkeeping.
+   - directive resolution bookkeeping,
+   - derived-order extraction.
 8. Add a first continuity review pass and verify that it can flag intentionally introduced contradictions.
 9. Run one baseline micro-simulation and one deliberately divergent branch to prove the interaction model works.
 
