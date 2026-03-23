@@ -1,34 +1,42 @@
-Target month: {{ .TargetDate }}
-Mode: {{ .Mode }}
-Current branch: {{ .BranchID }}
-Current snapshot date: {{ .CurrentDate }}
+You are advancing the simulation from {{ .CurrentDate }} to {{ .TargetDate }}.
 
-Context:
+Constraint profile: {{ .ConstraintProfile }}
+Meaning: {{ .ConstraintMeaning }}
+
+Output granularity: {{ .PromptDetailLevel }}
+Meaning: {{ .DetailLevelInstruction }}
+
+What you must do:
+1. Infer the most important developments of the month from the current state plus the active directives.
+2. Respect hard constraints, institutional friction, and path dependence.
+3. Use the historical reference anchors as comparison material, not as an instruction to force history back onto the branch.
+4. Emit only the most causally important changes that fit the requested granularity.
+5. Keep the output compact enough to remain machine-reliable.
+
+Current simulation state:
 {{ .ProjectedState }}
 
-Active directives:
+Active directives for this month:
 {{ .ActiveDirectives }}
 
-Recent events:
+Recent events already in the branch:
 {{ .RecentEvents }}
 
-Historical anchors:
+Historical reference anchors for this month:
 {{ .HistoricalAnchors }}
 
-Continuity warnings:
+Continuity warnings from earlier review:
 {{ .ContinuityWarnings }}
 
-If this branch has materially diverged, reason from the branch state rather than the known historical outcome.
-Return structured JSON for:
-- rationale_summary
-- assumptions
-- blocked_by
-- confidence
-- derived_orders
-- unexpected_effects
-- tool_calls_used
-- proposed_changes
-- events
-- directive_resolutions
-- sitrep_headline
-- sitrep_body
+Output contract:
+- Return exactly one RFC8259 JSON object.
+- Do not wrap it in markdown.
+- Do not add any commentary before or after the JSON.
+- Keep the output within this granularity budget:
+{{ .OutputBudget }}
+
+Expected JSON shape:
+{{ .JSONOutputExample }}
+
+If the calling environment provides tools, use them instead of a freeform JSON reply.
+If tools are not available, emit the JSON object directly in assistant content.

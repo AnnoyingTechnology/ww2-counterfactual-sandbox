@@ -5,148 +5,564 @@
   "mode": "plausible",
   "actors": {
     "germany": {
-      "summary": "Germany is positioned for a high-risk eastern campaign and remains constrained by ideology, competing institutions, and medium-term fuel vulnerability.",
-      "current_objective": "Seek operational decision before structural weaknesses bite too hard."
+      "summary": "Germany enters the eastern campaign with operational superiority but structural weaknesses in fuel, logistics, and industrial coordination. The Wehrmacht is at its qualitative peak but faces a war it cannot afford to protract. The regime's polycratic structure, ideological rigidity, and Hitler's personal interference constrain rational adaptation.",
+      "current_objective": "Achieve a rapid operational decision against the USSR before material disadvantages become decisive.",
+      "notes": [
+        "Armaments production is not yet fully mobilized; Todt heads the ministry, not Speer.",
+        "Einsatzgruppen are deploying with the invasion force; systematic mass killing begins immediately.",
+        "Fuel reserves cover approximately 2-3 months of intense operations before critical drawdown."
+      ]
     },
     "ussr": {
-      "summary": "The USSR faces imminent crisis but retains the depth to survive catastrophic opening losses if time can be bought.",
-      "current_objective": "Survive the initial shock and preserve a path to regeneration."
+      "summary": "The Soviet Union faces imminent catastrophe but retains strategic depth, massive raw manpower reserves, and industrial capacity that can be relocated eastward. The Red Army is poorly led and poorly deployed, with the officer corps still recovering from the 1937-38 purges. Stalin's refusal to accept intelligence of the attack has left forward forces exposed.",
+      "current_objective": "Survive the opening shock, preserve the core of the army, and buy time for mobilization and industrial evacuation.",
+      "notes": [
+        "Most tank and aircraft stocks are obsolete; modern types (T-34, KV-1, Il-2) are just entering production.",
+        "Industrial evacuation east of the Urals has not yet begun but will become one of the most consequential logistical operations of the war.",
+        "NKVD internal security apparatus remains powerful and will enforce discipline through extreme measures."
+      ]
     },
     "uk": {
-      "summary": "The UK remains resilient, economically connected, and strategically patient.",
-      "current_objective": "Hold out, tighten pressure, and wait for openings created by Axis overreach."
+      "summary": "Britain has survived the immediate existential crisis of 1940-41 and is transitioning from defensive survival to long-term strategic pressure. The economy is increasingly mobilized, Lend-Lease is flowing, and Bomber Command is building strength though still largely ineffective. The Royal Navy dominates surface warfare but is stressed by U-boat attrition in the Atlantic.",
+      "current_objective": "Maintain Atlantic lifelines, build offensive capability, tighten economic pressure on Germany, and support any new eastern front.",
+      "notes": [
+        "Bomber Command's area bombing campaign is in its early phase; strategic effect is minimal in 1941.",
+        "Imperial commitments stretch forces across the Mediterranean, Middle East, and soon the Far East.",
+        "Lend-Lease from the US is active since March 1941 but the US is not yet a belligerent."
+      ]
+    },
+    "usa": {
+      "summary": "The United States is formally neutral but increasingly aligned with Britain through Lend-Lease and naval cooperation. Industrial mobilization is accelerating but the military remains small. Entry into the war awaits a political trigger.",
+      "current_objective": "Support Britain and prepare for potential belligerency without a formal declaration.",
+      "notes": [
+        "Lend-Lease Act signed March 1941.",
+        "US Navy conducting undeclared convoy escort in the western Atlantic.",
+        "Pearl Harbor and full entry are six months away."
+      ]
+    },
+    "italy": {
+      "summary": "Italy is an active Axis belligerent but militarily weak. The Greek campaign was a humiliation, North Africa is a drain, and industrial capacity is far below German or British levels.",
+      "current_objective": "Maintain territorial positions in North Africa and the Mediterranean without catastrophic loss.",
+      "notes": [
+        "Italian industrial output is roughly one-fifth of Germany's.",
+        "The Italian fleet is a significant Mediterranean factor but constrained by fuel shortages.",
+        "Mussolini's regime is not yet under existential domestic pressure."
+      ]
     }
   },
   "domains": {
     "raw_materials_energy": {
       "oil_stockpile": {
-        "value": 78,
+        "value": 60,
         "unit": "stockpile_index",
         "hard_cap": 100,
-        "summary": "Fuel reserves are workable but not comfortable; sustained operations will keep drawing them down.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Germany holds approximately 950 kt of petroleum reserves entering Barbarossa. This covers roughly 2-3 months of intense campaigning. If the eastern campaign does not produce a quick decision, reserves will enter critical territory.",
+        "source_note": "[estimated] Index 100 = ~1600 kt (assessed wartime achievable peak reserve). Value 60 = ~950 kt. USSBS Oil Division Final Report gives total stocks ~1.65 Mt including pipeline/transit; net available reserve is lower. Tooze (Wages of Destruction ch.13) emphasizes chronic shortage. Range 800-1200 kt depending on accounting. Sources conflict on whether transit oil should count."
       },
       "synthetic_fuel_output": {
-        "value": 12,
+        "value": 13,
         "unit": "output_index",
         "hard_cap": 20,
-        "summary": "Synthetic output helps, but it does not erase long-term vulnerability.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "German synthetic fuel plants produce approximately 340 kt/month from coal hydrogenation and Fischer-Tropsch synthesis. Leuna is the largest single plant. Output meets roughly 46% of total fuel needs.",
+        "source_note": "[verified] Index 20 = ~520 kt/month (theoretical max all plants at full capacity). Value 13 = ~340 kt/month. 1941 total synthetic output ~4.1 Mt. Tooze p.412-413; USSBS Oil Division Final Report table IV; Birkenfeld (Der synthetische Treibstoff)."
       },
       "romanian_oil_access": {
-        "value": 0.88,
+        "value": 0.90,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Romanian access remains strong, though exposed to future pressure.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Romania (primarily Ploesti) delivers approximately 230 kt/month of crude to Germany and is the single largest external oil source. Access is secure but strategically exposed to future air attack and political defection.",
+        "source_note": "[verified] 1941 Romanian deliveries to Germany ~2.8 Mt total (Tooze p.413). Monthly ~230 kt. Ratio 0.90 reflects near-full access with minor transport friction. Romania is a full Axis partner under Antonescu since January 1941."
+      },
+      "germany_steel_monthly_kt": {
+        "value": 2350,
+        "unit": "thousand_metric_tons_monthly",
+        "summary": "German crude steel production runs at approximately 2350 kt/month. Steel is not yet a critical bottleneck but allocations are contested between military, construction, and armaments programs.",
+        "source_note": "[verified] 1941 annual crude steel ~28.2 Mt (Wagenfuhr, Anhang table). Monthly ~2350 kt. Overy (War and Economy p.261) confirms."
+      },
+      "germany_aluminum_monthly_t": {
+        "value": 22000,
+        "unit": "metric_tons_monthly",
+        "summary": "German aluminum production is approximately 22 kt/month, a critical input for aircraft production. Output is rising but competes with other alloy demands.",
+        "source_note": "[estimated] 1941 annual aluminum ~233 kt (USSBS). Monthly ~19.4 kt domestic. With captured Norwegian and French capacity, effective supply ~22 kt/month by mid-1941. Overy (Air War appendix) gives slightly higher."
+      },
+      "ussr_oil_annual_mt": {
+        "value": 33,
+        "unit": "million_metric_tons_annual",
+        "summary": "Soviet oil production is approximately 33 Mt/year, overwhelmingly from Baku. This dwarfs German production but is geographically concentrated and would become vulnerable if the southern front advances far enough.",
+        "source_note": "[verified] 1941 Soviet petroleum output ~33 Mt (Harrison, Economics of World War II appendix). Baku alone ~22 Mt. Not under military threat in June 1941."
+      },
+      "ussr_steel_annual_mt": {
+        "value": 18,
+        "unit": "million_metric_tons_annual",
+        "summary": "Soviet steel production is approximately 18 Mt/year but will crash to ~8 Mt in 1942 due to territorial losses and evacuation disruption before recovering.",
+        "source_note": "[verified] 1940 Soviet crude steel ~18.3 Mt (Harrison). 1942 trough ~8.1 Mt due to loss of Donbas. Recovery to ~12.4 Mt by 1943 as evacuated plants come online."
+      },
+      "uk_oil_import_dependence": {
+        "value": 0.95,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Britain imports over 95% of its petroleum, primarily from the Western Hemisphere. Atlantic shipping security is therefore an existential concern.",
+        "source_note": "[verified] UK domestic oil production negligible. Entirely dependent on imports from US, Venezuela, Middle East. Hancock and Gowing (British War Economy); Overy (Why the Allies Won ch.2)."
+      }
+    },
+    "industrial_production": {
+      "germany_aircraft_monthly": {
+        "value": 930,
+        "unit": "aircraft_per_month",
+        "summary": "Total German aircraft production in mid-1941 is approximately 930/month across all types. Pre-rationalization output; Speer's reforms will nearly triple this by 1944.",
+        "source_note": "[verified] 1941 total aircraft acceptance ~11030 (USSBS; Overy Air War appendix). Monthly ~920-950. Includes fighters, bombers, transports, trainers."
+      },
+      "germany_fighters_monthly": {
+        "value": 250,
+        "unit": "fighters_per_month",
+        "summary": "Single-engine fighter production (primarily Me 109F) runs at approximately 250/month. Adequate for current loss rates but catastrophically insufficient for a prolonged air war.",
+        "source_note": "[estimated] 1941 single-engine fighter acceptance ~2960 (USSBS; Overy). Monthly ~247. Mainly Me 109F; Fw 190 just entering production. Compare 1944 peak ~2500/month."
+      },
+      "germany_tanks_monthly": {
+        "value": 250,
+        "unit": "tanks_per_month",
+        "summary": "Tank and assault gun production is approximately 250/month, primarily Panzer III and IV. Below replacement needs for a sustained eastern campaign.",
+        "source_note": "[estimated] 1941 total AFV production ~3256 (Wagenfuhr). Monthly ~270 including assault guns. Pz III ~180/month, Pz IV ~40/month. Overy (War and Economy) confirms."
+      },
+      "germany_uboat_monthly": {
+        "value": 18,
+        "unit": "boats_per_month",
+        "summary": "U-boat commissioning runs at approximately 18/month, rising. Doenitz wants 40/month but industrial priority is contested.",
+        "source_note": "[verified] 1941 total U-boat deliveries ~199 (Blair, Hitler's U-Boat War vol.1). Monthly ~16-20, rising through the year."
+      },
+      "germany_trucks_monthly": {
+        "value": 4500,
+        "unit": "trucks_per_month",
+        "summary": "German truck production is approximately 4500/month. Insufficient to replace eastern front losses, which will far exceed production within months of Barbarossa.",
+        "source_note": "[estimated] 1941 total motor vehicle production ~55000-60000 (Tooze p.593). Monthly ~4500-5000. Eastern front will consume trucks faster than production replaces them."
+      },
+      "ussr_tanks_monthly": {
+        "value": 600,
+        "unit": "tanks_per_month",
+        "summary": "Soviet tank production is approximately 600/month and rising rapidly, though most are still obsolescent types. T-34 and KV production will accelerate dramatically after evacuation.",
+        "source_note": "[estimated] 1941 total Soviet tank production ~6590 (Glantz; Harrison). Monthly ~550-650. T-34 ~115/month by June 1941, rising. Total exceeded 2000/month by mid-1942."
+      },
+      "ussr_aircraft_monthly": {
+        "value": 1800,
+        "unit": "aircraft_per_month",
+        "summary": "Soviet aircraft production is approximately 1800/month but the majority are obsolescent designs. Massive losses in the opening days will temporarily exceed production.",
+        "source_note": "[estimated] 1941 total Soviet aircraft ~15735 (Harrison). Monthly ~1300-1800 accelerating. Most older types (I-16, SB); modern designs (Yak-1, Il-2) entering production."
+      },
+      "uk_aircraft_monthly": {
+        "value": 1650,
+        "unit": "aircraft_per_month",
+        "summary": "British aircraft production runs at approximately 1650/month across all types, exceeding German output and supplemented by Lend-Lease.",
+        "source_note": "[verified] 1941 UK aircraft production ~20094 (Postan, British War Production). Monthly ~1675. UK outproduced Germany in aircraft for most of 1940-41. Overy (Air War appendix) cross-confirms."
+      }
+    },
+    "manpower_labor": {
+      "germany_military_total_k": {
+        "value": 7234,
+        "unit": "thousands",
+        "summary": "Total Wehrmacht strength is approximately 7.23 million. The eastern deployment commits approximately 3.3 million German troops plus 600000 allied forces.",
+        "source_note": "[verified] Wehrmacht strength June 1941 ~7.234 million (Mueller, MGFA vol.4). Barbarossa: ~3.3 million German in 148 divisions plus ~600000 Finnish/Romanian/Hungarian/Italian allies. Glantz (Barbarossa appendix) confirms."
+      },
+      "germany_eastern_front_k": {
+        "value": 3300,
+        "unit": "thousands",
+        "summary": "Approximately 3.3 million German troops committed to the initial Barbarossa assault in three army groups, the largest land invasion in history.",
+        "source_note": "[verified] German ground forces for Barbarossa ~3.3 million in 148 divisions (Glantz, Barbarossa ch.2; MGFA vol.4). Plus ~600000 Axis allied troops."
+      },
+      "germany_monthly_replacements_k": {
+        "value": 90,
+        "unit": "thousands_per_month",
+        "summary": "Germany can generate approximately 90000 trained replacements per month. This will prove insufficient for eastern front casualty rates.",
+        "source_note": "[estimated] Monthly replacement capacity ~80000-100000 in 1941 (Overy; Mueller/MGFA). Casualty rates in the first months of Barbarossa will run at 2-3x this rate."
+      },
+      "germany_foreign_labor_k": {
+        "value": 3000,
+        "unit": "thousands",
+        "summary": "Approximately 3 million foreign workers (voluntary and forced) are employed in the German war economy. This will rise to over 7 million by 1944.",
+        "source_note": "[verified] Foreign workers in Reich mid-1941 ~3 million (Tooze p.517-518; Herbert, Hitler's Foreign Workers). Includes POWs, civilian workers, volunteers."
+      },
+      "ussr_military_total_k": {
+        "value": 5400,
+        "unit": "thousands",
+        "summary": "Total Soviet armed forces strength is approximately 5.4 million, with about 2.9 million in the western military districts facing the invasion.",
+        "source_note": "[verified] Red Army strength June 1941 ~5.37 million active (Glantz, Stumbling Colossus appendix). Western districts ~2.9 million. Full mobilization potential 14+ million. Krivosheev confirms."
+      },
+      "ussr_western_districts_k": {
+        "value": 2900,
+        "unit": "thousands",
+        "summary": "Approximately 2.9 million Soviet troops in the western military districts (Baltic, Western, Kiev, Odessa). Many are in exposed forward positions due to Stalin's refusal to authorize defensive deployments.",
+        "source_note": "[verified] Soviet forces in western districts ~2.9 million troops, ~10000 tanks, ~7000 combat aircraft (Glantz, Barbarossa ch.3). Most in vulnerable forward groupings."
+      },
+      "uk_military_total_k": {
+        "value": 3400,
+        "unit": "thousands",
+        "summary": "British armed forces total approximately 3.4 million, spread across home defense, Mediterranean, Middle East, and imperial garrisons.",
+        "source_note": "[estimated] UK total armed forces mid-1941 ~3.3-3.5 million (Hancock and Gowing; Ellis, Brute Force appendix). Rising through conscription."
       }
     },
     "logistics_fronts": {
       "supply_status_east": {
-        "value": 0.74,
+        "value": 0.85,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Eastern supply is good enough for momentum but vulnerable to distance and rail friction.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "German supply posture at the Barbarossa jump-off line is good. Ammunition and fuel stockpiles are at acceptable levels for the initial offensive. The critical constraint will emerge as the advance outpaces rail conversion and truck endurance.",
+        "source_note": "[estimated] At jump-off, supply was adequate for 2-3 weeks of intense operations. Each 100 km of advance degraded effective capacity by 10-15% due to gauge incompatibility, road quality, and truck attrition. Van Creveld (Supplying War ch.5); Stahel (Operation Barbarossa and Germany's Defeat in the East)."
       },
       "front_position_east": {
-        "value": 0.52,
+        "value": 0.50,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "The eastern front is poised between opportunity and overstretch.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "German forces are at the Soviet border, ready to launch Barbarossa. Scale: 0.0 = pre-war German border; 0.50 = Soviet frontier; 0.75 = approximate Moscow-Leningrad line; 1.0 = beyond historical maximum penetration.",
+        "source_note": "[verified] June 22 1941: forces massed along Soviet border from Baltic to Romania. Jump-off positions correspond to the Molotov-Ribbentrop partition line. Scale defined for this sandbox."
       },
       "partisan_pressure": {
-        "value": 0.14,
+        "value": 0.03,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Rear-area insecurity exists but is not yet dominant.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Partisan activity is negligible at the start of Barbarossa. Significant growth from late 1941 onward as occupation hardens and Soviet-directed operations begin.",
+        "source_note": "[estimated] Organized partisan activity minimal in first months. Significant growth from late 1941 (Soviet directive July 18 1941). By 1943 ~280000 active partisans (Glantz). Hill (The War Behind the Eastern Front)."
+      },
+      "germany_truck_pool_east_k": {
+        "value": 600,
+        "unit": "thousands",
+        "summary": "Approximately 600000 motor vehicles committed to the eastern campaign. Losses from poor roads, overloading, and lack of spare parts will destroy a large fraction within months.",
+        "source_note": "[verified] Wehrmacht committed ~600000 motor vehicles to Barbarossa (Van Creveld p.155; Stahel). By November 1941 ~40% out of service. Replacement rate far below loss rate."
+      },
+      "germany_rail_gauge_gap": {
+        "value": 0.95,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Nearly 100% of Soviet railway is broad gauge (1524 mm) vs German standard gauge (1435 mm). Conversion rate ~20 km/day per construction battalion, creating a growing supply bottleneck.",
+        "source_note": "[verified] Soviet broad gauge 1524 mm vs European standard 1435 mm. Conversion rate ~15-20 km/day per Eisenbahnpioniere battalion. Van Creveld (Supplying War ch.5); Stahel. The gauge gap was a known and decisive logistics constraint."
+      }
+    },
+    "air_naval": {
+      "germany_luftwaffe_east": {
+        "value": 2770,
+        "unit": "combat_aircraft",
+        "summary": "The Luftwaffe commits approximately 2770 combat aircraft to the eastern front, achieving total air superiority in the opening days by destroying most Soviet aircraft on the ground.",
+        "source_note": "[verified] Luftwaffe eastern deployment ~2770 combat aircraft (Boog, MGFA vol.4). ~1200 bombers, ~720 fighters, ~600 dive bombers, ~250 reconnaissance. Soviet first-day losses ~1200 aircraft, mostly on the ground."
+      },
+      "germany_uboat_operational": {
+        "value": 65,
+        "unit": "boats",
+        "summary": "Approximately 65 U-boats operational in the Atlantic, with roughly 30 at sea at any time. The main Atlantic battle is still ahead.",
+        "source_note": "[verified] U-boat force June 1941 ~65 operational (Blair vol.1). Total commissioned ~150+ but many in training, transit, or refit."
+      },
+      "atlantic_shipping_losses_monthly_kt": {
+        "value": 300,
+        "unit": "thousand_gross_register_tons_monthly",
+        "summary": "Allied merchant shipping losses to U-boats average approximately 300 kt GRT per month in early-mid 1941. Painful but not yet existential for Britain.",
+        "source_note": "[estimated] Monthly U-boat sinkings early-mid 1941 ~250-350 kt GRT (Blair; Roskill, War at Sea vol.1). Crisis peak will come in early-mid 1942."
+      },
+      "germany_air_superiority_east": {
+        "value": 0.95,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "German air superiority over the eastern front is nearly total at the start of Barbarossa. The Luftwaffe destroyed ~1200 Soviet aircraft on the first day alone.",
+        "source_note": "[verified] Luftwaffe achieved air supremacy in first 48 hours. Soviet VVS lost ~3900 aircraft in the first week (Glantz; Boog/MGFA). Soviet air recovery takes 12-18 months."
+      },
+      "ussr_combat_aircraft_west": {
+        "value": 7100,
+        "unit": "combat_aircraft",
+        "summary": "Soviet air forces in western military districts field approximately 7100 combat aircraft, but the great majority are obsolescent and will be destroyed in the opening days.",
+        "source_note": "[estimated] Soviet VVS in western districts ~7100 (Glantz, Barbarossa appendix). Total Soviet air strength ~20000. Most I-16 fighters, SB/DB-3 bombers - a generation behind German equipment."
+      },
+      "uk_bomber_command_aircraft": {
+        "value": 400,
+        "unit": "operational_bombers",
+        "summary": "RAF Bomber Command has approximately 400 operational bombers. The strategic bombing campaign is in its infancy: navigation is poor, bomb loads small, accuracy terrible.",
+        "source_note": "[estimated] Bomber Command operational strength mid-1941 ~400-500 (Webster and Frankland vol.1). The Butt Report (August 1941) revealed only ~10% of bombs fell within 5 miles of target."
+      },
+      "uk_fighter_command_aircraft": {
+        "value": 1200,
+        "unit": "operational_fighters",
+        "summary": "RAF Fighter Command maintains approximately 1200 operational fighters for home defense and offensive sweeps.",
+        "source_note": "[estimated] Fighter Command mid-1941 ~1100-1300 operational (Orange, Dowding and Churchill). Includes Spitfire V, Hurricane II, early night fighters."
       }
     },
     "strategic_bombing_repair": {
       "bombing_damage_fuel": {
+        "value": 0.01,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Allied bombing damage to German fuel production is negligible in June 1941. RAF lacks accuracy and payload to threaten synthetic fuel plants. Systematic fuel targeting begins only in May 1944.",
+        "source_note": "[verified] RAF bombing in 1941 caused minimal industrial damage. Butt Report (August 1941) showed most bombs fell miles from targets. USSBS Oil Division Final Report; Webster and Frankland vol.1."
+      },
+      "repair_capacity_industry": {
+        "value": 0.85,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "German industrial repair capacity is strong in 1941 because there is relatively little to repair. Organizational reserves for reconstruction exist but are untested against serious bombing.",
+        "source_note": "[estimated] In 1941, German industry operated largely undisturbed by bombing. The real test came in 1943-44. USSBS Overall Report; Speer memoirs."
+      },
+      "germany_factory_dispersal": {
         "value": 0.02,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Fuel-plant bombing damage remains minor in this opening slice.",
-        "source_note": "Initial scaffold baseline"
-      },
-      "repair_capacity_industry": {
-        "value": 0.58,
+        "summary": "Factory dispersal is essentially not underway. German industry is concentrated in the Ruhr, Silesia, and central Germany. Dispersal becomes urgent only after heavy bombing in 1943.",
+        "source_note": "[estimated] No significant dispersal in 1941. Jaegerstab dispersal program began February 1944. Underground factory construction (Mittelwerk) started late 1943. USSBS; Tooze ch.22."
+      }
+    },
+    "technology_programs": {
+      "me262_stage": {
+        "value": 0.10,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Repair capacity is real, but not unlimited.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "The Me 262 exists as an airframe design and has flown with a piston engine (April 1941). Jet engine development (Jumo 004) faces severe metallurgical problems. Operational deployment is at least 3 years away.",
+        "source_note": "[verified] Me 262 V1 first flight with piston engine April 18 1941. First jet-powered flight July 18 1942. Operational July 1944. Stage 0.10 = early prototype, critical components unresolved. Boyne (Messerschmitt Me 262); USSBS."
+      },
+      "stg44_stage": {
+        "value": 0.05,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "The assault rifle concept exists at the design study level (MKb 42 program). Hitler will resist the program for years. Mass production begins only in 1944.",
+        "source_note": "[estimated] MKb 42(H) development began ~1940 at Haenel. First prototypes 1942. Hitler repeatedly opposed. Redesignated StG 44 in 1944. Stage 0.05 = early development. Senich (The German Assault Rifle)."
+      },
+      "type_xxi_stage": {
+        "value": 0.0,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "The Type XXI electroboot has not yet been conceived. Design work begins 1943. Even when rushed into production it arrives too late.",
+        "source_note": "[verified] Type XXI design 1943, first hull 1944, only two operational patrols before war's end. In June 1941 this program does not exist. Blair vol.2; Roessler (The U-Boat)."
+      },
+      "v_weapons_stage": {
+        "value": 0.15,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "V-1 and V-2 are under active development at Peenemuende. The A4 rocket has not yet achieved a successful flight. Operational deployment is 3+ years away.",
+        "source_note": "[estimated] A4 (V-2) first successful test October 3 1942. V-1 first powered flight December 1942. Operational use from June/September 1944. Stage 0.15 = active development, no successful flight. Neufeld (The Rocket and the Reich)."
+      },
+      "germany_radar_capability": {
+        "value": 0.40,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "German radar (Freya, Wuerzburg) is functional for early warning and fighter direction but lags behind British cavity magnetron and centimetric radar. This gap will widen.",
+        "source_note": "[estimated] Germany had operational Freya and Wuerzburg radar by 1941. British cavity magnetron (1940) gave Allies decisive radar advantage Germany never closed. Pritchard (The Radar War); Jones (Most Secret War)."
       }
     },
     "diplomacy_external_relations": {
       "negotiated_peace_feasibility": {
-        "value": 0.08,
+        "value": 0.05,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Peace remains remote without deep strategic or political change.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Negotiated peace is virtually impossible. Germany is launching an ideologically-driven war of annihilation. Britain is committed to total victory. No credible intermediary or basis for negotiation exists.",
+        "source_note": "[verified] No serious peace channel existed in June 1941. Hess flight (May 1941) failed completely. Churchill rejected negotiation. Kershaw (Hitler: Nemesis); Lukacs (Five Days in London)."
+      },
+      "us_entry_status": {
+        "value": 0.30,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "The US is not a belligerent but is increasingly aligned with Britain through Lend-Lease and naval cooperation. Full entry awaits Pearl Harbor in December 1941. Scale: 0 = fully neutral, 1 = full belligerent.",
+        "source_note": "[verified] Lend-Lease Act March 11 1941. Atlantic Charter August 1941. US Navy conducting undeclared convoy escort. Full belligerency December 8 1941 (Japan), December 11 1941 (Germany)."
+      },
+      "turkey_chromium_trade": {
+        "value": 0.70,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Turkey supplies chromium ore to Germany under trade agreements. Chromium is critical for armored steel production. Trade will be suspended under Allied pressure in April 1944.",
+        "source_note": "[estimated] German-Turkish trade (Clodius agreement) ~40-45 kt/year chrome ore through 1943. Suspended April 1944. Leitz (Nazi Germany and Neutral Europe)."
+      },
+      "lend_lease_uk_active": {
+        "value": 1.0,
+        "unit": "binary",
+        "hard_cap": 1,
+        "summary": "Lend-Lease to Britain is active since March 1941. Flow still ramping up but will become a major factor in British war capacity.",
+        "source_note": "[verified] Lend-Lease Act signed March 11 1941. Total to UK over the war ~$31.4 billion. Stettinius (Lend-Lease: Weapon for Victory); Hancock and Gowing."
+      },
+      "japan_pacific_tension": {
+        "value": 0.65,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "US-Japan tension is high and rising. The US oil embargo (coming July 1941) will force Japan toward a decision for war. Pearl Harbor is six months away.",
+        "source_note": "[estimated] US froze Japanese assets July 26 1941, effectively embargoing oil, setting Japan on a 6-month clock. Ike (Japan's Decision for War); Barnhart (Japan Prepares for Total War)."
+      },
+      "italy_military_value": {
+        "value": 0.25,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Italy's military contribution to the Axis is modest. Greek campaign was a humiliation, North Africa requires German rescue, and industrial capacity is far below the major belligerents.",
+        "source_note": "[estimated] Failed Greece invasion (Oct 1940), defeats in North Africa (Dec 1940-Feb 1941). German intervention required in both theaters. Knox (Mussolini Unleashed; Hitler's Italian Allies)."
       }
     },
     "atrocity_repression": {
       "genocidal_policy_intensity": {
-        "value": 0.48,
+        "value": 0.35,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Radical policy is already embedded and can intensify further if the branch pushes in that direction.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Nazi genocidal policy is in a transitional phase. Jews face ghettoization, sporadic mass killing, and T4 euthanasia. Barbarossa marks the beginning of systematic mass shooting by Einsatzgruppen. Industrialized extermination (death camps) is 6-9 months away.",
+        "source_note": "[verified] By June 1941: ghettoization in Poland complete; T4 (~70000 killed); sporadic pogroms. Einsatzgruppen deploy with Barbarossa, begin mass shootings immediately. Wannsee Conference January 1942 coordinates the Final Solution. Browning (Origins of the Final Solution); Hilberg (Destruction of the European Jews). Value 0.35 = systematic persecution and emerging mass killing, pre-industrial extermination."
       },
       "occupation_brutality": {
-        "value": 0.44,
+        "value": 0.30,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Occupation behavior is already harsh and politically costly over time.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Occupation policy is harsh in western Europe and about to become exterminationist in the east. Commissar Order and Barbarossa Decree authorize murder of political officials and collective punishment.",
+        "source_note": "[verified] Commissar Order June 6 1941 mandated execution of captured commissars. Barbarossa Decree removed legal protections for Soviet civilians. Stahel (Joining Hitler's Crusade); Bartov (The Eastern Front). Value 0.30 = western occupation ongoing, eastern exterminationist occupation about to begin."
       },
       "deportation_intensity": {
-        "value": 0.4,
+        "value": 0.25,
         "unit": "ratio",
         "hard_cap": 1,
-        "summary": "Coercive displacement is already part of regime behavior.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Forced deportation of Jewish populations into ghettos is well advanced in Poland. Large-scale forced labor deportation into Germany underway. Eastern deportation will intensify dramatically with Barbarossa.",
+        "source_note": "[estimated] ~3 million Polish Jews in ghettos; ~3 million foreign workers in Reich. Mass deportation to death camps begins late 1941/early 1942. Herbert (Hitler's Foreign Workers); Browning."
+      },
+      "ussr_political_repression": {
+        "value": 0.70,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Soviet political repression remains intense. The Great Purge devastated the officer corps and society. NKVD maintains pervasive surveillance. Order 270 and penal battalions are coming.",
+        "source_note": "[verified] Great Purge killed ~680000 and imprisoned millions. ~35000 military officers purged 1937-38 including 3 of 5 marshals. Order 270 (August 1941) criminalized surrender. Applebaum (Gulag); Glantz (Stumbling Colossus ch.3)."
+      },
+      "germany_atrocity_admin_capacity": {
+        "value": 0.50,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "The administrative apparatus for mass killing is substantial but not yet at its industrialized peak. SS and police infrastructure well-organized. Einsatzgruppen deploying. Death camp construction has not yet begun.",
+        "source_note": "[estimated] By June 1941: SS/SD/Gestapo infrastructure well-developed. Four Einsatzgruppen (~3000 men) deploy with Barbarossa. Death camp system (Chelmno, Belzec, Sobibor, Treblinka, Auschwitz-Birkenau) constructed 1941-42. Value 0.50 = capable apparatus, pre-industrial phase. Hilberg; Browning."
+      },
+      "germany_secrecy_burden": {
+        "value": 0.20,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Secrecy burden is manageable because the full scale of mass killing has not yet begun. Will increase significantly as the extermination program expands.",
+        "source_note": "[estimated] In June 1941, mass killing beginning but not yet at scale requiring extensive secrecy infrastructure. Knowledge spread as Einsatzgruppen operations expanded. Longerich (Davon haben wir nichts gewusst)."
       }
     },
     "politics_friction": {
       "leadership_interference": {
+        "value": 70,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Hitler's personal interference in military and industrial decisions is high and rising. He has assumed effective command of the armed forces and overrules generals on strategic and operational matters.",
+        "source_note": "[estimated] Hitler took direct command increasingly from 1938. By June 1941 he directed Barbarossa planning; December 1941 he assumes Army command. Kershaw (Hitler: Nemesis); Megargee (Inside Hitler's High Command). Value 70 = high but not yet maximum; peaks 1943-44."
+      },
+      "bureaucratic_coordination": {
+        "value": 35,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Germany's polycratic system produces chronic coordination failures. Competing power centers (Goering's Four-Year Plan, Todt's Armaments Ministry, SS economic empire, three armed services) work at cross-purposes.",
+        "source_note": "[verified] Polycratic character is a central theme of Tooze and Overy. Goering competed with Todt (then Speer from Feb 1942) and the SS. No unified war economy command existed until Speer's reforms. Value 35 = functional but deeply fragmented."
+      },
+      "ideological_rigidity": {
+        "value": 85,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Nazi ideology permeates strategic decisions: the eastern campaign is a war of racial annihilation. Ideology blocks rational labor policy, shapes occupation policy, and prevents strategic flexibility.",
+        "source_note": "[verified] Commissar Order, Hunger Plan, and Generalplan Ost were ideological products. Racial ideology blocked female mobilization, efficient POW labor use, and pragmatic occupation policy. Tooze; Stahel; Bartov. Value 85 = overwhelming ideological constraint."
+      },
+      "elite_cohesion": {
+        "value": 78,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "The Nazi regime and military elite are broadly cohesive, buoyed by victories since 1938. Dissent exists in small resistance circles but is not politically significant. July 20 plot is three years away.",
+        "source_note": "[estimated] Elite cohesion high after Poland, France, Balkans victories. Conservative resistance (Beck, Goerdeler) marginal. Military opposition inhibited by oath and easy victories. Cracks after Stalingrad. Hoffmann (History of the German Resistance). Value 78 = strong with latent fracture points."
+      },
+      "policy_flexibility": {
+        "value": 18,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Capacity to reverse major commitments is very low. Barbarossa is a one-way decision. The prestige trap will become catastrophic at Stalingrad.",
+        "source_note": "[estimated] Hitler refused retreats (Stalingrad, Demyansk, Courland). Regime's ideological self-image made compromise impossible. Kershaw; Stahel. Value 18 = extremely low flexibility."
+      },
+      "civilian_tolerance": {
+        "value": 82,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "German civilian morale is high. The war has been quick and victorious, civilian consumption partly maintained, bombing negligible. Will erode as casualties mount and bombing intensifies.",
+        "source_note": "[estimated] Morale sustained by victories and low civilian sacrifice vs WWI. Rationing manageable. SD reports (Meldungen aus dem Reich) show general confidence. Decline after Stalingrad and heavy bombing. Kershaw (The Hitler Myth); Stargardt (The German War). Value 82 = high tolerance, pre-adversity."
+      },
+      "interservice_rivalry": {
         "value": 65,
         "unit": "index",
         "hard_cap": 100,
-        "summary": "Senior interference is persistent enough to distort operational and industrial choices.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Competition among Heer, Luftwaffe, Kriegsmarine, and the SS is intense. Goering's Luftwaffe empire competes for resources. The Waffen-SS is building its own military arm.",
+        "source_note": "[estimated] Goering controlled aircraft production and flak outside normal channels. Waffen-SS grew from ~100000 (1941) to ~900000 (1944), competing directly with Army. Megargee; Tooze. Value 65 = significant rivalry causing material waste."
       },
-      "bureaucratic_coordination": {
-        "value": 46,
+      "information_quality": {
+        "value": 40,
         "unit": "index",
         "hard_cap": 100,
-        "summary": "Coordination is workable but fragmented by rivalry.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "German intelligence quality is mediocre. The Abwehr is partly penetrated. Operational intelligence systematically underestimates Soviet reserves. Hitler filters information to fit preconceptions.",
+        "source_note": "[estimated] FHO (Foreign Armies East) underestimated Soviet divisions, tank production, and mobilization by factors of 2-3x. Abwehr under Canaris partly compromised. Glantz (Soviet Military Intelligence in War); Kahn (Hitler's Spies). Value 40 = functional tactical intelligence, poor strategic assessment."
       },
-      "ideological_rigidity": {
-        "value": 84,
-        "unit": "index",
-        "hard_cap": 100,
-        "summary": "Ideology remains a major barrier to materially rational choices.",
-        "source_note": "Initial scaffold baseline"
-      },
-      "elite_cohesion": {
+      "germany_hitler_interference": {
         "value": 72,
         "unit": "index",
         "hard_cap": 100,
-        "summary": "Elite cohesion remains substantial, though partly fear-driven.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Hitler's specific personal operational meddling is high and will increase. He overrules generals, involves himself in divisional-level decisions, and prevents retreats.",
+        "source_note": "[estimated] Examples in 1941: diversion from Moscow to Kiev (August), refusal to authorize retreat at Moscow (December). Assumes direct Army command December 1941. Halder diary; Megargee. Value 72, rising toward maximum by 1943-44."
       },
-      "policy_flexibility": {
-        "value": 24,
+      "ussr_stalin_interference": {
+        "value": 85,
         "unit": "index",
         "hard_cap": 100,
-        "summary": "Prestige choices remain hard to reverse cleanly.",
-        "source_note": "Initial scaffold baseline"
+        "summary": "Stalin's interference is extreme. He refused intelligence warnings, paralyzed the initial response, and will micromanage operations until mid-1942 when catastrophic losses force delegation.",
+        "source_note": "[verified] Stalin rejected intelligence of attack, forbade preparations, was incapacitated for days after June 22. Operational interference disastrous in 1941-42 (Kharkov May 1942). Improvement from late 1942 as he deferred to Zhukov, Vasilevsky. Glantz; Roberts (Stalin's Wars). Value 85 = peak interference."
+      },
+      "ussr_purge_aftereffects": {
+        "value": 75,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "The Red Army is severely weakened by 1937-38 purges. ~35000 officers removed, many executed. Junior officers hold senior commands prematurely. Competence will improve dramatically through the war.",
+        "source_note": "[verified] Purges removed ~35000 officers including 3 of 5 marshals, 13 of 15 army commanders, ~50% of regimental commanders. Glantz (Stumbling Colossus ch.3); Reese (Stalin's Reluctant Soldiers). Value 75 = severe ongoing effect, partial recovery underway."
+      },
+      "ussr_casualty_tolerance": {
+        "value": 90,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Soviet regime tolerance for casualties is extremely high. Authoritarian control, ideological commitment, existential threat, and population depth allow absorption of losses that would break other states.",
+        "source_note": "[verified] Total Soviet military dead ~8.7-11.4 million (Krivosheev). Civilian dead ~14-17 million. Order 270 criminalized surrender. Blocking detachments used. Value 90 = extreme tolerance enabled by regime type and existential stakes."
+      },
+      "ussr_bureaucratic_coordination": {
+        "value": 55,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Soviet command is centralized but rigid. Stavka and GKO provide unified direction (advantage over Germany's polycracy), but initiative at lower levels suppressed by fear. Will improve substantially by 1943.",
+        "source_note": "[estimated] GKO established June 30 1941. More centralized than Germany but suffered from excessive caution and fear of initiative. Glantz; Harrison. Value 55 = centralized but rigid, improving."
+      },
+      "uk_war_cabinet_unity": {
+        "value": 85,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Churchill's War Cabinet is cohesive and committed to total victory. The Halifax peace option of May 1940 has passed. Cross-party unity is strong.",
+        "source_note": "[verified] War Cabinet maintained strong unity from May 1940. Labour coalition (Attlee, Bevin) fully committed. No serious peace faction after Halifax's marginalization. Lukacs (Five Days in London); Roberts (Walking with Destiny). Value 85 = very high unity."
+      },
+      "uk_imperial_overstretch": {
+        "value": 60,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "Britain maintains global commitments that strain available forces. Singapore (February 1942) will illustrate this dramatically. Imperial commitments compete with European strategy.",
+        "source_note": "[estimated] Forces spread across North Africa, Middle East, India, Malaya, home defense. Singapore garrison ~85000 (lost February 1942). Jackson (The British Empire and the Second World War). Value 60 = significant but manageable, pre-Far East crisis."
+      },
+      "uk_civilian_tolerance": {
+        "value": 82,
+        "unit": "index",
+        "hard_cap": 100,
+        "summary": "British civilian morale is strong after surviving the Blitz. Rationing accepted. Public support for the war effort is high.",
+        "source_note": "[estimated] Morale held through the Blitz (Sep 1940-May 1941). Mass-Observation and Home Intelligence reports show sustained commitment. Calder (The People's War). Value 82 = high morale post-Blitz."
+      }
+    },
+    "information_intelligence": {
+      "ultra_status": {
+        "value": 0.50,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "British codebreaking at Bletchley Park reads Luftwaffe and Army Enigma. Naval Enigma is harder but aided by codebook captures. Ultra is becoming a major strategic advantage.",
+        "source_note": "[verified] Army/Luftwaffe Enigma broken from 1940. Naval Enigma aided by capture of U-110 codebooks May 1941. Hinsley (British Intelligence in the Second World War). Value 0.50 = partial but growing capability."
+      },
+      "germany_intelligence_on_ussr": {
+        "value": 0.25,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "German intelligence on Soviet military strength, reserves, and industrial capacity is seriously deficient. FHO systematically underestimates Soviet divisions, tank production, and mobilization reserves.",
+        "source_note": "[verified] FHO estimated ~200 Soviet divisions; actual ~300+. Tank production underestimated 2-3x. Halder diary records repeated shock at new Soviet formations. Glantz (Soviet Military Intelligence); Kahn. Value 0.25 = poor strategic intelligence."
+      },
+      "ussr_intelligence_on_germany": {
+        "value": 0.60,
+        "unit": "ratio",
+        "hard_cap": 1,
+        "summary": "Soviet intelligence has collected extensive accurate intelligence on invasion preparations, including from Sorge. However, Stalin personally refuses to credit it, rendering it operationally useless.",
+        "source_note": "[verified] Sorge reported date of Barbarossa from Tokyo. Multiple sources confirmed attack. Stalin rejected all warnings as British provocations. Andrew and Gordievsky (KGB); Glantz. Value 0.60 = good collection, catastrophically poor political reception."
       }
     }
   },

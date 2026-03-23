@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -22,6 +23,8 @@ func Run(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 	}
 
 	switch args[0] {
+	case "llm-check":
+		return llmCheckCommand(ctx, args[1:], stdout)
 	case "run":
 		return runCommand(ctx, args[1:], stdout)
 	case "resume":
@@ -34,6 +37,8 @@ func Run(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 		return reportCommand(ctx, args[1:], stdout)
 	case "compare":
 		return compareCommand(ctx, args[1:], stdout)
+	case "dump-monthly-prompt":
+		return dumpMonthlyPromptCommand(ctx, args[1:], stdout)
 	case "help", "-h", "--help":
 		printUsage(stdout)
 		return nil
@@ -86,6 +91,60 @@ func runCommand(ctx context.Context, args []string, stdout io.Writer) error {
 	if result.InterruptedByDecisionWindow {
 		fmt.Fprintf(stdout, "decision_window_interrupt=%s\n", strings.Join(result.DecisionWindowIDs, ","))
 	}
+	return nil
+}
+
+type llmCheckResponse struct {
+	OK      bool   `json:"ok"`
+	Model   string `json:"model"`
+	Backend string `json:"backend"`
+	Note    string `json:"note"`
+}
+
+func llmCheckCommand(ctx context.Context, args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("llm-check", flag.ContinueOnError)
+	projectRoot := fs.String("project-root", ".", "project root")
+	llmConfigPath := fs.String("llm-config", "", "LLM config JSON")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *llmConfigPath == "" {
+		return fmt.Errorf("--llm-config is required")
+	}
+
+	root, err := filepath.Abs(*projectRoot)
+	if err != nil {
+		return err
+	}
+
+	llmCfg, err := config.LoadLLMConfig(resolveConfigPath(root, *llmConfigPath))
+	if err != nil {
+		return err
+	}
+	client, err := llm.NewClient(llmCfg)
+	if err != nil {
+		return err
+	}
+	if client == nil {
+		return fmt.Errorf("configured provider resolved to mock; llm-check requires a real LLM client")
+	}
+
+	var response llmCheckResponse
+	err = client.GenerateJSON(ctx, llm.StructuredRequest{
+		SystemPrompt: "Return valid RFC8259 JSON only. Use double quotes for all keys and strings. Do not include markdown fences.",
+		UserPrompt:   "Respond with exactly one JSON object containing keys ok, model, backend, and note. Set ok to true. Set model to the model you are serving if known, otherwise echo the configured model. Keep note short.",
+		SchemaName:   "llm_check",
+		Temperature:  0.0,
+		MaxTokens:    llmCfg.MaxTokens,
+	}, &response)
+	if err != nil {
+		return err
+	}
+
+	fmt.Fprintf(stdout, "ok=%t\n", response.OK)
+	fmt.Fprintf(stdout, "model=%s\n", response.Model)
+	fmt.Fprintf(stdout, "backend=%s\n", response.Backend)
+	fmt.Fprintf(stdout, "note=%s\n", response.Note)
 	return nil
 }
 
@@ -262,6 +321,53 @@ func compareCommand(ctx context.Context, args []string, stdout io.Writer) error 
 	return nil
 }
 
+func dumpMonthlyPromptCommand(ctx context.Context, args []string, stdout io.Writer) error {
+	fs := flag.NewFlagSet("dump-monthly-prompt", flag.ContinueOnError)
+	projectRoot := fs.String("project-root", ".", "project root")
+	runtimeConfigPath := fs.String("runtime-config", "", "runtime config JSON")
+	runID := fs.String("run", "", "run id")
+	branchID := fs.String("branch", "main", "branch id")
+	snapshotDate := fs.String("snapshot-date", "", "snapshot date YYYY-MM (defaults to latest snapshot)")
+	detailLevel := fs.String("detail", "", "prompt detail level override: coarse, medium, or fine")
+	outputPath := fs.String("output", "", "optional output file path")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *runID == "" {
+		return fmt.Errorf("--run is required")
+	}
+
+	service, err := newService(*projectRoot, "", *runtimeConfigPath)
+	if err != nil {
+		return err
+	}
+
+	dump, err := service.DumpMonthlyPrompt(*runID, *branchID, *snapshotDate, *detailLevel)
+	if err != nil {
+		return err
+	}
+
+	body := renderPromptDump(dump)
+	if *outputPath != "" {
+		path := *outputPath
+		if !filepath.IsAbs(path) {
+			root, err := filepath.Abs(*projectRoot)
+			if err != nil {
+				return err
+			}
+			path = filepath.Join(root, path)
+		}
+		if err := os.WriteFile(path, []byte(body), 0o644); err != nil {
+			return err
+		}
+		fmt.Fprintf(stdout, "wrote=%s\n", path)
+		return nil
+	}
+
+	_, err = io.WriteString(stdout, body)
+	return err
+}
+
 func newService(projectRoot, llmConfigPath, runtimeConfigPath string) (*engine.Service, error) {
 	root, err := filepath.Abs(projectRoot)
 	if err != nil {
@@ -290,7 +396,11 @@ func newService(projectRoot, llmConfigPath, runtimeConfigPath string) (*engine.S
 			if err != nil {
 				return nil, err
 			}
-			adjudicator = engine.NewLLMAdjudicator(client, pack, runtimeCfg.PromptSummaryLimit)
+			reviewMaxTokens := llmCfg.MaxTokens / 2
+			if reviewMaxTokens < 1400 {
+				reviewMaxTokens = 1400
+			}
+			adjudicator = engine.NewLLMAdjudicator(client, pack, runtimeCfg.PromptDetailLevel, runtimeCfg.PromptSummaryLimit, llmCfg.Temperature, llmCfg.MaxTokens, reviewMaxTokens)
 		}
 	}
 
@@ -310,11 +420,33 @@ func resolveConfigPath(projectRoot, path string) string {
 func printUsage(stdout io.Writer) {
 	_, _ = io.WriteString(stdout, strings.TrimSpace(`
 ww2cs commands:
+  llm-check test OpenAI-compatible LLM wiring with a tiny JSON prompt
   run      start a run and advance it
   resume   continue an existing branch
   fork     fork a branch from a checkpoint
   status   show branch status for a run
   report   print the latest or requested sitrep
   compare  compare the latest snapshots of two branches
+  dump-monthly-prompt render the full JSON-only monthly prompt for a run snapshot
 `)+"\n")
+}
+
+func renderPromptDump(dump engine.MonthlyPromptDump) string {
+	return strings.TrimSpace(fmt.Sprintf(`
+# Monthly Prompt Dump
+
+variant: %s
+run: %s
+branch: %s
+snapshot_date: %s
+target_date: %s
+mode: %s
+detail_level: %s
+
+## System Prompt
+%s
+
+## User Prompt
+%s
+`, dump.PromptVariant, dump.RunID, dump.BranchID, dump.SnapshotDate, dump.TargetDate, dump.Mode, dump.DetailLevel, dump.SystemPrompt, dump.UserPrompt)) + "\n"
 }

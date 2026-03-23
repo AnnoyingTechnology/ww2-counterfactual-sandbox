@@ -125,8 +125,11 @@ The CLI defaults to the mock adjudicator if no LLM config is supplied.
 To use a real model:
 
 1. Copy or adapt [config/llm/openai_compatible.example.json](/home/julien/Documents/Scripts/WW2_AlternativeEnding/config/llm/openai_compatible.example.json).
-2. Set the API key environment variable named in that config.
+2. If your provider needs authentication, set the API key environment variable named in that config.
 3. Pass the config file to `run` or `resume`.
+
+`timeout_seconds` is provider-request timeout in seconds.
+Set `timeout_seconds` to `-1` if you want no client-side timeout for very slow reasoning-heavy models.
 
 Example:
 
@@ -137,6 +140,36 @@ export OPENAI_API_KEY=...
   --scenario scenarios/historical/june_1941.json \
   --months 1
 ```
+
+### LM Studio Local Test
+
+This repo also ships a localhost config for LM Studio:
+
+- [config/llm/lm_studio.local.json](/home/julien/Documents/Scripts/WW2_AlternativeEnding/config/llm/lm_studio.local.json)
+
+If LM Studio is exposing an OpenAI-compatible server on `http://localhost:1234/v1` with model `qwen3.5-2b`, run:
+
+First, do a lightweight plumbing check:
+
+```bash
+./bin/ww2cs llm-check --llm-config config/llm/lm_studio.local.json
+```
+
+Then, if you want to try the full monthly adjudication path:
+
+```bash
+./bin/ww2cs run \
+  --llm-config config/llm/lm_studio.local.json \
+  --scenario scenarios/historical/june_1941.json \
+  --months 1
+```
+
+This local config does not require an API key.
+It also uses `response_format_type: "text"` because LM Studio rejects OpenAI's older `json_object` response-format mode.
+Very small local models may pass `llm-check` but still fail the full `run` command because the monthly adjudication schema is much heavier than a simple JSON connectivity test.
+
+For remote reasoning-heavy models, expect long waits to be normal.
+The client can be configured with `timeout_seconds: -1` so multi-minute generations are not cut off locally.
 
 ## Generated Artifacts
 

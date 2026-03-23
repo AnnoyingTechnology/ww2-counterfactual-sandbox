@@ -10,6 +10,7 @@ import (
 
 	"github.com/AnnoyingTechnology/ww2-counterfactual-sandbox/internal/config"
 	"github.com/AnnoyingTechnology/ww2-counterfactual-sandbox/internal/model"
+	"github.com/AnnoyingTechnology/ww2-counterfactual-sandbox/internal/prompts"
 	"github.com/AnnoyingTechnology/ww2-counterfactual-sandbox/internal/storage"
 	"github.com/AnnoyingTechnology/ww2-counterfactual-sandbox/internal/timeutil"
 )
@@ -85,6 +86,18 @@ type MetricDifference struct {
 	Left     float64
 	Right    float64
 	Delta    float64
+}
+
+type MonthlyPromptDump struct {
+	RunID         string
+	BranchID      string
+	SnapshotDate  string
+	TargetDate    string
+	Mode          string
+	DetailLevel   string
+	SystemPrompt  string
+	UserPrompt    string
+	PromptVariant string
 }
 
 func NewService(store *storage.Store, adjudicator Adjudicator, runtime config.RuntimeConfig) *Service {
@@ -443,6 +456,84 @@ func (s *Service) Report(runID, branchID, date string) (string, error) {
 		date = snapshot.Date
 	}
 	return s.store.LoadSitrep(runID, branchID, date)
+}
+
+func (s *Service) DumpMonthlyPrompt(runID, branchID, snapshotDate, detailLevel string) (MonthlyPromptDump, error) {
+	if runID == "" {
+		return MonthlyPromptDump{}, fmt.Errorf("run id is required")
+	}
+	if branchID == "" {
+		branchID = "main"
+	}
+
+	branch, err := s.store.LoadBranchMeta(runID, branchID)
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	var snapshot model.Snapshot
+	if snapshotDate == "" {
+		snapshot, err = s.store.LoadLatestSnapshot(runID, branchID)
+	} else {
+		snapshot, err = s.store.LoadSnapshot(runID, branchID, snapshotDate)
+	}
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	targetDate, err := timeutil.AddMonths(snapshot.Date, 1)
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	activeDirectives := filterActiveDirectives(branch.ActiveDirectives, targetDate)
+	anchors, err := s.referenceAnchorsForMonth(targetDate)
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+	continuityWarnings, err := s.recentContinuityWarnings(runID, branchID)
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	pack, err := prompts.Load()
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	systemPrompt, err := pack.Raw("system")
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	level := normalizePromptDetailLevel(firstNonEmpty(detailLevel, s.runtime.PromptDetailLevel))
+
+	userPrompt, err := renderMonthlyPrompt(pack, AdjudicationInput{
+		TargetDate:         targetDate,
+		CurrentSnapshot:    snapshot,
+		ActiveDirectives:   activeDirectives,
+		RecentEvents:       snapshot.RecentEvents,
+		HistoricalAnchors:  anchors,
+		ContinuityWarnings: continuityWarnings,
+		Mode:               branch.Mode,
+	}, level, s.runtime.PromptSummaryLimit)
+	if err != nil {
+		return MonthlyPromptDump{}, err
+	}
+
+	userPrompt = strings.TrimSpace(userPrompt + "\n\nTools are unavailable for this test. Return exactly one RFC8259 JSON object in assistant content. Do not emit markdown fences, <think> tags, or explanatory text outside the JSON object.")
+
+	return MonthlyPromptDump{
+		RunID:         runID,
+		BranchID:      branchID,
+		SnapshotDate:  snapshot.Date,
+		TargetDate:    targetDate,
+		Mode:          branch.Mode,
+		DetailLevel:   level,
+		SystemPrompt:  systemPrompt,
+		UserPrompt:    userPrompt,
+		PromptVariant: "monthly_json_only",
+	}, nil
 }
 
 func (s *Service) advanceBranch(ctx context.Context, runID string, branch model.BranchMeta, months int) (RunResult, error) {

@@ -6,13 +6,14 @@ import (
 )
 
 type LLMConfig struct {
-	Provider       string  `json:"provider"`
-	BaseURL        string  `json:"base_url,omitempty"`
-	APIKeyEnv      string  `json:"api_key_env,omitempty"`
-	Model          string  `json:"model,omitempty"`
-	TimeoutSeconds int     `json:"timeout_seconds,omitempty"`
-	MaxTokens      int     `json:"max_tokens,omitempty"`
-	Temperature    float64 `json:"temperature,omitempty"`
+	Provider           string  `json:"provider"`
+	BaseURL            string  `json:"base_url,omitempty"`
+	APIKeyEnv          string  `json:"api_key_env,omitempty"`
+	Model              string  `json:"model,omitempty"`
+	ResponseFormatType string  `json:"response_format_type,omitempty"`
+	TimeoutSeconds     int     `json:"timeout_seconds,omitempty"`
+	MaxTokens          int     `json:"max_tokens,omitempty"`
+	Temperature        float64 `json:"temperature,omitempty"`
 }
 
 type RuntimeConfig struct {
@@ -23,6 +24,7 @@ type RuntimeConfig struct {
 	DecisionWindowInterrupts    bool   `json:"decision_window_interrupts"`
 	ContinuityReviewEveryMonths int    `json:"continuity_review_every_months"`
 	PromptSummaryLimit          int    `json:"prompt_summary_limit"`
+	PromptDetailLevel           string `json:"prompt_detail_level"`
 }
 
 func DefaultRuntimeConfig() RuntimeConfig {
@@ -34,6 +36,7 @@ func DefaultRuntimeConfig() RuntimeConfig {
 		DecisionWindowInterrupts:    true,
 		ContinuityReviewEveryMonths: 3,
 		PromptSummaryLimit:          12,
+		PromptDetailLevel:           "medium",
 	}
 }
 
@@ -57,6 +60,9 @@ func LoadLLMConfig(path string) (LLMConfig, error) {
 	}
 	if cfg.Provider == "" {
 		cfg.Provider = "mock"
+	}
+	if cfg.ResponseFormatType == "" {
+		cfg.ResponseFormatType = "json_object"
 	}
 	if cfg.TimeoutSeconds == 0 {
 		cfg.TimeoutSeconds = 60
@@ -90,6 +96,9 @@ func LoadRuntimeConfig(path string) (RuntimeConfig, error) {
 	}
 	if cfg.PromptSummaryLimit == 0 {
 		cfg.PromptSummaryLimit = 12
+	}
+	if cfg.PromptDetailLevel == "" {
+		cfg.PromptDetailLevel = "medium"
 	}
 	return cfg, nil
 }

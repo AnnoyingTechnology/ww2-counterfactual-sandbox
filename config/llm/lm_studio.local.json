@@ -1,0 +1,9 @@
+{
+  "provider": "openai_compatible",
+  "base_url": "http://localhost:1234/v1",
+  "model": "qwen3.5-2b",
+  "response_format_type": "text",
+  "timeout_seconds": 60,
+  "max_tokens": 2400,
+  "temperature": 0.3
+}
